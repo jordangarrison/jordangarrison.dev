@@ -2,7 +2,7 @@ import type { WE } from './WorkExperience.model'
 export const workExperiences: WE[] = [
 	{
 		meta: {
-			title: 'Infrastructure Engineer',
+			title: 'Senior Infrastructure Engineer',
 			company: 'FloSports',
 			image: 'https://www.flosports.tv/wp-content/uploads/2020/04/Hawk-ignite.png',
 			url: 'https://www.flosports.tv',
@@ -72,7 +72,7 @@ export const workExperiences: WE[] = [
 				'https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/ap98zhetk0hi50n2ilgd',
 			url: 'https://www.lynntech.com',
 			date: {
-				start: 'May 2016',
+				start: 'April 2016',
 				end: 'May 2017'
 			}
 		},
