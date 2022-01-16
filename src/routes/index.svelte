@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CardText, Col, Row } from 'sveltestrap'
+	import { CardText, Col, Row, Image } from 'sveltestrap'
 	import WorkExperience from '$lib/WorkExperience.svelte'
 	import { workExperiences } from '$lib/workExperience.data'
 
@@ -10,9 +10,26 @@
 	<title>Hi I'm Jordan</title>
 </svelte:head>
 
-<div class="title">
-	<h1>Hi I'm Jordan</h1>
-	<h3>A Cloud Infrastructure Engineer</h3>
+<div>
+	<Row>
+		<Col xs={12} sm={6} md={4} lg={4}>
+			<div class="profile-picture">
+				<Image
+					class="rounded-circle"
+					fluid
+					src="https://avatars.githubusercontent.com/u/22905777?v=4"
+					alt="profile-picture"
+				/>
+			</div>
+		</Col>
+
+		<Col xs={12} sm={6} md={8} lg={8}>
+			<div class="title">
+				<h1>Hi I'm Jordan</h1>
+				<h3>A Cloud Infrastructure Engineer</h3>
+			</div>
+		</Col>
+	</Row>
 </div>
 
 <div class="work-experience">
@@ -22,10 +39,10 @@
 			{#each workExperience.body as line}
 				<CardText>
 					<Row>
-						<Col class="col-lg-3 col-md-2 col-sm-12 col-12"
+						<Col xs={12} sm={12} md={2} lg={3}
 							><span class="we-item-title text-muted">{line.title}</span></Col
 						>
-						<Col class="col-lg-9 col-md-10 col-sm-12 col-12"
+						<Col xs={12} sm={12} md={10} lg={9}
 							><span class="we-item-description">{line.description}</span></Col
 						>
 					</Row>
@@ -36,6 +53,10 @@
 </div>
 
 <style>
+	.profile-picture {
+		width: 100%;
+		max-width: 300px;
+	}
 	.title {
 		text-align: center;
 		margin-top: 50px;
