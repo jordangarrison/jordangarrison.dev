@@ -38,12 +38,12 @@
 			</div>
 		</CardHeader>
 		<Row>
-			<Col class="col-lg-2 col-md-2 col-sm-2 col-12">
+			<Col xs={12} sm={2} md={2} lg={2}>
 				<div class="we-image">
 					<CardImg src={image} top alt="Work Experience Image" />
 				</div>
 			</Col>
-			<Col class="col-lg-10 col-md-10 col-sm-10 col-12">
+			<Col xs={12} sm={10} md={10} lg={10}>
 				<div class="we-body">
 					<CardBody><slot /></CardBody>
 				</div>
