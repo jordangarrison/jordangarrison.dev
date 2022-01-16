@@ -38,12 +38,12 @@
 			</div>
 		</CardHeader>
 		<Row>
-			<Col class="col-md-2">
+			<Col class="col-lg-2 col-md-2 col-sm-2 col-12">
 				<div class="we-image">
 					<CardImg src={image} top alt="Work Experience Image" />
 				</div>
 			</Col>
-			<Col class="col-md-8">
+			<Col class="col-lg-10 col-md-10 col-sm-10 col-12">
 				<div class="we-body">
 					<CardBody><slot /></CardBody>
 				</div>
@@ -63,10 +63,10 @@
 
 <style>
 	.we-row {
-		width: 80%;
+		width: 90%;
 		margin: 20px auto;
 		text-align: left;
-		max-width: 800px;
+		max-width: 1000px;
 	}
 
 	.we-image {
