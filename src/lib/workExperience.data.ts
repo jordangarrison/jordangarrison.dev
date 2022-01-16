@@ -2,7 +2,7 @@ import type { WE } from './WorkExperience.model'
 export const workExperiences: WE[] = [
 	{
 		meta: {
-			title: 'Senior Infrastructure Engineer',
+			title: 'Infrastructure Engineer',
 			company: 'FloSports',
 			image: 'https://www.flosports.tv/wp-content/uploads/2020/04/Hawk-ignite.png',
 			url: 'https://www.flosports.tv',
