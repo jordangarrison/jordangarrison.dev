@@ -2,7 +2,7 @@ import type { WE } from './WorkExperience.model'
 export const workExperiences: WE[] = [
 	{
 		meta: {
-			title: 'Infrastructure Engineer',
+			title: 'Senior Infrastructure Engineer',
 			company: 'FloSports',
 			image: 'https://www.flosports.tv/wp-content/uploads/2020/04/Hawk-ignite.png',
 			url: 'https://www.flosports.tv',
@@ -55,7 +55,7 @@ export const workExperiences: WE[] = [
 			{
 				title: 'Ranger/Atlas',
 				description:
-					'Lead initiative to implement the Ranger and Atlas services into our Haoop Clusters. These allowee for us to implement RBAC into the Hadoop ecosystem at GM and gave tools to other teams to be able to manage users from common tools.'
+					'Led initiative to implement the Ranger and Atlas services into our Haoop Clusters. These allowee for us to implement RBAC into the Hadoop ecosystem at GM and gave tools to other teams to be able to manage users from common tools.'
 			},
 			{
 				title: 'Hadoop Monitoring Stack',
@@ -80,7 +80,7 @@ export const workExperiences: WE[] = [
 			{
 				title: 'Iodine Detection Kit',
 				description:
-					'Continued a NIH funeded prototype of an iodine detection kit which would allow for cheap validation of water in regions with high rates of Hypothyroidism. The kit was built with a RaspberryPi, Ardruino and Colorimeter and had a QT interface built in Python.'
+					'NIH funded prototype of an iodine detection kit which would allow for cheap validation of water in regions with high rates of Hypothyroidism. The kit was built with a RaspberryPi, Ardruino and Colorimeter and had a QT interface built in Python.'
 			},
 			{
 				title: 'Desalination Monitor',
