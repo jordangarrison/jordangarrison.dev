@@ -12,5 +12,6 @@ mkShell {
     docker
     nodePackages.svelte-language-server
     nodePackages.pnpm
+    nodePackages.prettier
   ];
 }

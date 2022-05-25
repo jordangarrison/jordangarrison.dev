@@ -37,6 +37,13 @@
 				<NavItem>
 					<NavLink href="/contact">Contact</NavLink>
 				</NavItem>
+				<NavItem>
+					<NavLink
+						download="jordan-garrison-resume.pdf"
+						href="https://raw.githubusercontent.com/jordangarrison/resume/main/resume.pdf"
+						>Resume</NavLink
+					>
+				</NavItem>
 			</Nav>
 		</Collapse>
 	</Navbar>
