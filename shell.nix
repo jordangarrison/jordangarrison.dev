@@ -3,7 +3,8 @@ let
     (fetchTarball "https://nixos.org/channels/nixos-unstable/nixexprs.tar.xz")
     { };
 
-in { pkgs ? import <nixpkgs> { } }:
+in
+{ pkgs ? import <nixpkgs> { } }:
 with pkgs;
 
 mkShell {
@@ -11,7 +12,7 @@ mkShell {
     unstable.nodejs
     docker
     nodePackages.svelte-language-server
-    nodePackages.pnpm
+    nodePackages.npm
     nodePackages.prettier
   ];
 }

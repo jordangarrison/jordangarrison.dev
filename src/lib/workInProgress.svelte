@@ -1,7 +1,7 @@
-<script lange="ts">
-	import { Image, Row, Col } from 'sveltestrap'
+<script lang="ts">
+	import { Image, Row, Col } from 'sveltestrap';
 
-	export let page
+	export let page: any;
 </script>
 
 <Row>

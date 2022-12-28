@@ -7,17 +7,17 @@
 		NavLink,
 		NavbarToggler,
 		Collapse,
-		NavItem,
-		Dropdown,
-		DropdownToggle,
-		DropdownMenu,
-		DropdownItem
-	} from 'sveltestrap'
+		NavItem
+		// Dropdown,
+		// DropdownToggle,
+		// DropdownMenu,
+		// DropdownItem
+	} from 'sveltestrap';
 
-	let isOpen = false
-	const handleUpdate = (event) => {
-		isOpen = event.detail.isOpen
-	}
+	let isOpen = false;
+	const handleUpdate = (event: any) => {
+		isOpen = event.detail.isOpen;
+	};
 </script>
 
 <Styles />
