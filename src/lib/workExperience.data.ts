@@ -2,7 +2,7 @@ import type { WE } from './WorkExperience.model'
 export const workExperiences: WE[] = [
 	{
 		meta: {
-			title: 'Senior Infrastructure Engineer',
+			title: 'Tech Lead Manager',
 			company: 'FloSports',
 			image: 'https://www.flosports.tv/wp-content/uploads/2020/04/Hawk-ignite.png',
 			url: 'https://www.flosports.tv',
@@ -12,6 +12,11 @@ export const workExperiences: WE[] = [
 			}
 		},
 		body: [
+			{
+				title: 'Kubernetes IaC Migration',
+				description:
+					'Built the business case, scoped, ticketed and worked with my team to implement a full pipeline to ship our Kubernetes infrastructure cross cloud with Terraform. Used cloud build to deploy and operated with GitHub Flow model for development. This gave our team the ability to have ephemeral preview cluster environments to quickly test out new changes to our FloSports Infrastructure'
+			},
 			{
 				title: 'Load Testing Platform',
 				description:
@@ -36,7 +41,7 @@ export const workExperiences: WE[] = [
 	},
 	{
 		meta: {
-			title: 'Big Data (Haddop) Platform Engineer',
+			title: 'Big Data (Hadoop) Platform Engineer',
 			company: 'General Motors',
 			image:
 				'https://media.gm.com/dld/content/dam/Shared/Images/Logos/gm/GM_Gradient_Brandmark_RGB-2021.jpg/_jcr_content/renditions/cq5dam.web.1280.1280.jpeg',
