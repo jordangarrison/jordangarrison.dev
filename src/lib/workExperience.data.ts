@@ -15,7 +15,7 @@ export const workExperiences: WE[] = [
 			{
 				title: 'Kubernetes IaC Migration',
 				description:
-					'Built the business case, scoped, ticketed and worked with my team to implement a full pipeline to ship our Kubernetes infrastructure cross cloud with Terraform. Used cloud build to deploy and operated with GitHub Flow model for development. This gave our team the ability to have ephemeral preview cluster environments to quickly test out new changes to our FloSports Infrastructure'
+					'Built the business case, scoped, ticketed and worked with my team to implement a full pipeline to ship our Kubernetes infrastructure cross cloud with Terraform. Used cloud build to deploy and operated with GitHub Flow model for development. This gave our team the ability to have ephemeral preview cluster environments to quickly test out new changes to our FloSports Infrastructure.'
 			},
 			{
 				title: 'Load Testing Platform',
