@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { CardText, Col, Row } from 'sveltestrap'
-
-	export const prerender = true
+	import { CardText, Col, Row } from '@sveltestrap/sveltestrap';
 </script>
 
 <svelte:head>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Image, Row, Col } from 'sveltestrap';
+	import { Image, Row, Col } from '@sveltestrap/sveltestrap';
 
 	export let page: any;
 </script>
