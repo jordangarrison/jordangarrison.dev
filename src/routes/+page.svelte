@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { CardText, Col, Row, Image } from 'sveltestrap'
-	import WorkExperience from '$lib/WorkExperience.svelte'
-	import { workExperiences } from '$lib/workExperience.data'
-
-	export const prerender = true
+	import { CardText, Col, Row, Image } from '@sveltestrap/sveltestrap';
+	import WorkExperience from '$lib/WorkExperience.svelte';
+	import { workExperiences } from '$lib/workExperience.data';
 </script>
 
 <svelte:head>

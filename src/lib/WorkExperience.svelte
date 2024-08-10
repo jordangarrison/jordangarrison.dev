@@ -9,8 +9,8 @@
 		Col,
 		CardHeader,
 		CardFooter
-	} from 'sveltestrap'
-	import type { WEMeta } from '$lib/WorkExperience.model'
+	} from '@sveltestrap/sveltestrap';
+	import type { WEMeta } from '$lib/WorkExperience.model';
 
 	export let workExperience: WEMeta = {
 		title: 'Job Name',
@@ -21,10 +21,10 @@
 			start: '01/01/2019',
 			end: '01/01/2019'
 		}
-	}
-	let title = workExperience.title
-	let company = workExperience.company
-	let image = workExperience.image
+	};
+	let title = workExperience.title;
+	let company = workExperience.company;
+	let image = workExperience.image;
 </script>
 
 <div class="we-row">
