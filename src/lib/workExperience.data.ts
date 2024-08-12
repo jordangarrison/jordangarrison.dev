@@ -1,4 +1,4 @@
-import type { WE } from './WorkExperience.model'
+import type { WE } from './WorkExperience.model';
 export const workExperiences: WE[] = [
 	{
 		meta: {
@@ -73,8 +73,7 @@ export const workExperiences: WE[] = [
 		meta: {
 			title: 'Lab Technician',
 			company: 'Lynntech',
-			image:
-				'https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_170,w_170,f_auto,b_white,q_auto:eco,dpr_1/ap98zhetk0hi50n2ilgd',
+			image: 'https://www.lynntech.com/wp-content/uploads/2016/04/HeaderLogo_Tiny.png',
 			url: 'https://www.lynntech.com',
 			date: {
 				start: 'April 2016',
@@ -94,4 +93,4 @@ export const workExperiences: WE[] = [
 			}
 		]
 	}
-]
+];
