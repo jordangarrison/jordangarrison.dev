@@ -23,6 +23,10 @@
 	const handleUpdate = (event: any) => {
 		isOpen = event.detail.isOpen;
 	};
+
+	function toggleNavbar() {
+		isOpen = !isOpen;
+	}
 </script>
 
 <Styles />
@@ -30,7 +34,7 @@
 <header>
 	<Navbar color="light" light expand="md" sticky="top">
 		<NavbarBrand href="/">jordangarrison.dev</NavbarBrand>
-		<NavbarToggler on:click={() => (isOpen = !isOpen)} />
+		<NavbarToggler on:click={toggleNavbar} />
 		<Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
 			<Nav class="ms-auto" navbar>
 				<NavItem>
