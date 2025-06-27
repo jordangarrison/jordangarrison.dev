@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CardText, Col, Row, Image } from '@sveltestrap/sveltestrap';
+	import { Col, Row, Image } from '@sveltestrap/sveltestrap';
 	import WorkExperience from '$lib/WorkExperience.svelte';
 	import { workExperiences } from '$lib/workExperience.data';
 </script>
@@ -35,16 +35,16 @@
 	{#each workExperiences as workExperience}
 		<WorkExperience workExperience={workExperience.meta}>
 			{#each workExperience.body as line}
-				<CardText>
-					<Row>
-						<Col xs={12} sm={12} md={2} lg={3}
-							><span class="we-item-title text-muted">{line.title}</span></Col
-						>
-						<Col xs={12} sm={12} md={10} lg={9}
-							><span class="we-item-description">{line.description}</span></Col
-						>
+				<div class="work-experience-item">
+				<Row>
+					<Col xs={12} sm={12} md={2} lg={3}
+						><span class="we-item-title text-muted">{line.title}</span></Col
+					>
+					<Col xs={12} sm={12} md={10} lg={9}
+						><span class="we-item-description">{line.description}</span></Col
+					>
 					</Row>
-				</CardText>
+				</div>
 			{/each}
 		</WorkExperience>
 	{/each}
@@ -72,6 +72,11 @@
 	.we-item-description {
 		float: left;
 		font-size: 0.8em;
+	}
+
+	.work-experience-item {
+		margin-bottom: 0.5rem;
+		padding: 0.25rem 0;
 	}
 
 	div {

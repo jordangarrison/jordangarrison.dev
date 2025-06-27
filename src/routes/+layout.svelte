@@ -33,12 +33,12 @@
 		<NavbarToggler on:click={() => (isOpen = !isOpen)} />
 		<Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
 			<Nav class="ms-auto" navbar>
-				<!-- <NavItem>
-					 <NavLink href="/blog">Blog</NavLink>
-					 </NavItem> -->
-				<!-- <NavItem>
-					 <NavLink href="/about">About</NavLink>
-					 </NavItem> -->
+				<NavItem>
+					<NavLink href="/blog">Blog</NavLink>
+				</NavItem>
+				<NavItem>
+					<NavLink href="/about">About</NavLink>
+				</NavItem>
 				<NavItem>
 					<NavLink href="/contact">Contact</NavLink>
 				</NavItem>
