@@ -6,7 +6,6 @@
 		Nav,
 		NavLink,
 		NavbarToggler,
-		Collapse,
 		NavItem
 		// Dropdown,
 		// DropdownToggle,
@@ -20,9 +19,6 @@
 	let { children }: Props = $props();
 
 	let isOpen = $state(false);
-	const handleUpdate = (event: any) => {
-		isOpen = event.detail.isOpen;
-	};
 
 	function toggleNavbar() {
 		isOpen = !isOpen;
@@ -35,7 +31,7 @@
 	<Navbar color="light" light expand="md" sticky="top">
 		<NavbarBrand href="/">jordangarrison.dev</NavbarBrand>
 		<NavbarToggler on:click={toggleNavbar} />
-		<Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
+		<div class="collapse navbar-collapse" class:show={isOpen}>
 			<Nav class="ms-auto" navbar>
 				<NavItem>
 					<NavLink href="/blog">Blog</NavLink>
@@ -54,7 +50,7 @@
 					>
 				</NavItem>
 			</Nav>
-		</Collapse>
+		</div>
 	</Navbar>
 </header>
 <main>
