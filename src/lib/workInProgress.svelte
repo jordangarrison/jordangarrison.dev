@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { Image, Row, Col } from '@sveltestrap/sveltestrap';
 
-	export let page: any;
+	interface Props {
+		page: any;
+	}
+
+	let { page }: Props = $props();
 </script>
 
 <Row>
