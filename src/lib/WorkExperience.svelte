@@ -12,7 +12,12 @@
 	} from '@sveltestrap/sveltestrap';
 	import type { WEMeta } from '$lib/WorkExperience.model';
 
-	export let workExperience: WEMeta = {
+	interface Props {
+		workExperience?: WEMeta;
+		children?: import('svelte').Snippet;
+	}
+
+	let { workExperience = {
 		title: 'Job Name',
 		company: 'Company Name',
 		image: 'https://via.placeholder.com/150',
@@ -21,7 +26,7 @@
 			start: '01/01/2019',
 			end: '01/01/2019'
 		}
-	};
+	}, children }: Props = $props();
 	let title = workExperience.title;
 	let company = workExperience.company;
 	let image = workExperience.image;
@@ -45,14 +50,14 @@
 			</Col>
 			<Col xs={12} sm={10} md={10} lg={10}>
 				<div class="we-body">
-					<CardBody><slot /></CardBody>
+					<CardBody>{@render children?.()}</CardBody>
 				</div>
 			</Col>
 		</Row>
 		<CardFooter class="text-muted">
 			<CardSubtitle>
 				<span class="we-date">
-					<i class="fa fa-calendar-alt" />
+					<i class="fa fa-calendar-alt"></i>
 					<span class="we-date-start">{workExperience.date.start}</span>
 					<span class="we-date-end">{workExperience.date.end}</span>
 				</span>
