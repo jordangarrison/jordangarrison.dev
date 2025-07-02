@@ -37,6 +37,9 @@
 					<NavLink href="/blog">Blog</NavLink>
 				</NavItem>
 				<NavItem>
+					<NavLink href="/portfolio">Portfolio</NavLink>
+				</NavItem>
+				<NavItem>
 					<NavLink href="/about">About</NavLink>
 				</NavItem>
 				<NavItem>
