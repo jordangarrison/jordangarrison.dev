@@ -8,103 +8,198 @@
 		Row,
 		Col,
 		CardHeader,
-		CardFooter
+		CardFooter,
+		Badge
 	} from '@sveltestrap/sveltestrap';
-	import type { WEMeta } from '$lib/WorkExperience.model';
+	import type { WE } from '$lib/WorkExperience.model';
 
 	interface Props {
-		workExperience?: WEMeta;
-		children?: import('svelte').Snippet;
+		workExperience: WE;
 	}
 
-	let { workExperience = {
-		title: 'Job Name',
-		company: 'Company Name',
-		image: 'https://via.placeholder.com/150',
-		url: 'https://www.google.com',
-		date: {
-			start: '01/01/2019',
-			end: '01/01/2019'
-		}
-	}, children }: Props = $props();
-	let title = workExperience.title;
-	let company = workExperience.company;
-	let image = workExperience.image;
+	let { workExperience }: Props = $props();
 </script>
 
-<div class="we-row">
-	<Card>
-		<CardHeader>
-			<div class="we-title">
-				<CardTitle>{title}</CardTitle>
-			</div>
-			<div class="we-subtitle">
-				<CardSubtitle class="text-muted">{company}</CardSubtitle>
-			</div>
+<div class="work-experience">
+	<Card class="work-experience-card">
+		<CardHeader class="work-experience-header">
+			<Row class="align-items-center">
+				<Col xs={12} sm={2} class="text-center">
+					<div class="company-logo">
+						<CardImg src={workExperience.meta.image} alt={`${workExperience.meta.company} logo`} />
+					</div>
+				</Col>
+				<Col xs={12} sm={10}>
+					<div class="work-experience-info">
+						<CardTitle class="position-title">{workExperience.meta.title}</CardTitle>
+						<CardSubtitle class="company-name">
+							<a href={workExperience.meta.url} target="_blank" rel="noopener noreferrer">
+								{workExperience.meta.company}
+							</a>
+						</CardSubtitle>
+						<div class="employment-period">
+							<Badge color="secondary" class="date-badge">
+								{workExperience.meta.date.start} - {workExperience.meta.date.end}
+							</Badge>
+						</div>
+					</div>
+				</Col>
+			</Row>
 		</CardHeader>
-		<Row>
-			<Col xs={12} sm={2} md={2} lg={2}>
-				<div class="we-image">
-					<CardImg src={image} top alt="Work Experience Image" />
-				</div>
-			</Col>
-			<Col xs={12} sm={10} md={10} lg={10}>
-				<div class="we-body">
-					<CardBody>{@render children?.()}</CardBody>
-				</div>
-			</Col>
-		</Row>
-		<CardFooter class="text-muted">
-			<CardSubtitle>
-				<span class="we-date">
-					<i class="fa fa-calendar-alt"></i>
-					<span class="we-date-start">{workExperience.date.start}</span>
-					<span class="we-date-end">{workExperience.date.end}</span>
-				</span>
-			</CardSubtitle>
-		</CardFooter>
+
+		<CardBody class="work-experience-body">
+			<div class="achievements">
+				{#each workExperience.body as achievement}
+					<div class="achievement-item">
+						<h5 class="achievement-title">{achievement.title}</h5>
+						<p class="achievement-description">{achievement.description}</p>
+					</div>
+				{/each}
+			</div>
+		</CardBody>
 	</Card>
 </div>
 
 <style>
-	.we-row {
-		width: 90%;
-		margin: 20px auto;
-		text-align: left;
-		max-width: 1000px;
+	.work-experience {
+		width: 100%;
+		max-width: 1200px;
+		margin: 2rem auto;
+		padding: 0 1rem;
 	}
 
-	.we-image {
-		width: 100px;
-		padding: 20px;
+	:global(.work-experience-card) {
+		border: 1px solid #dee2e6;
+		border-radius: 8px;
+		overflow: hidden;
+		transition: all 0.3s ease;
 	}
 
-	.we-title {
-		font-size: 1.5em;
-		font-weight: bold;
+	:global(.work-experience-card:hover) {
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+		transform: translateY(-2px);
 	}
 
-	.we-subtitle {
-		font-size: 1.2em;
-		font-weight: bold;
+	:global(.work-experience-header) {
+		background-color: #f8f9fa;
+		border-bottom: 1px solid #dee2e6;
+		padding: 2rem 1.5rem;
 	}
 
-	.we-body {
-		flex: 1;
+	.company-logo {
+		width: 80px;
+		height: 80px;
+		border-radius: 8px;
+		overflow: hidden;
+		margin: 0 auto;
+		background: white;
+		padding: 8px;
+		border: 1px solid #dee2e6;
+	}
+
+	.company-logo :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		border-radius: 4px;
+	}
+
+	.work-experience-info {
+		padding-left: 1rem;
+	}
+
+	:global(.position-title) {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 0.5rem;
+		color: #212529;
+	}
+
+	:global(.company-name) {
+		font-size: 1.1rem;
+		font-weight: 500;
+		margin-bottom: 0.75rem;
+		color: #6c757d;
+	}
+
+	:global(.company-name a) {
+		color: #0d6efd;
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	:global(.company-name a:hover) {
+		color: #0b5ed7;
+		text-decoration: underline;
+	}
+
+	.employment-period {
+		margin-top: 0.5rem;
+	}
+
+	:global(.work-experience-body) {
+		padding: 2rem;
+	}
+
+	.achievements {
+		display: flex;
 		flex-direction: column;
-		font-size: 1.1em;
-		line-height: 1.1em;
-		float: left;
+		gap: 1.5rem;
 	}
 
-	.we-date {
-		font-size: 0.8em;
+	.achievement-item {
+		padding: 1.5rem;
+		background: #ffffff;
+		border-radius: 6px;
+		border: 1px solid #e9ecef;
+		transition: all 0.2s ease;
 	}
 
-	.we-date-start {
-		float: left;
+	.achievement-item:hover {
+		border-color: #dee2e6;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+		transform: translateX(2px);
 	}
-	.we-date-end {
-		float: right;
+
+	.achievement-title {
+		font-size: 1.125rem;
+		font-weight: 600;
+		color: #212529;
+		margin-bottom: 0.75rem;
+	}
+
+	.achievement-description {
+		color: #495057;
+		line-height: 1.6;
+		margin-bottom: 0;
+		font-size: 0.95rem;
+	}
+
+	@media (max-width: 768px) {
+		.work-experience-info {
+			padding-left: 0;
+			text-align: center;
+			margin-top: 1rem;
+		}
+
+		:global(.position-title) {
+			font-size: 1.25rem;
+		}
+
+		:global(.company-name) {
+			font-size: 1rem;
+		}
+
+		:global(.work-experience-header) {
+			padding: 1.5rem 1rem;
+		}
+
+		:global(.work-experience-body) {
+			padding: 1.5rem;
+		}
+
+		.achievement-item {
+			padding: 1rem;
+		}
 	}
 </style>

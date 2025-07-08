@@ -1,4 +1,5 @@
 import type { WE } from './WorkExperience.model';
+
 export const workExperiences: WE[] = [
 	{
 		meta: {
@@ -13,35 +14,35 @@ export const workExperiences: WE[] = [
 		},
 		body: [
 			{
-				title: 'Kubernetes IaC Migration',
+				title: 'Kubernetes Infrastructure Migration',
 				description:
-					'Built the business case, scoped, ticketed and worked with my team to implement a full pipeline to ship our Kubernetes infrastructure cross cloud with Terraform. Used cloud build to deploy and operated with GitHub Flow model for development. This gave our team the ability to have ephemeral preview cluster environments to quickly test out new changes to our FloSports Infrastructure.'
+					'Led the migration of FloSports infrastructure to Kubernetes using Infrastructure as Code (IaC) with Terraform. Built comprehensive business case, scoped requirements, and implemented full CI/CD pipeline for cross-cloud deployment. Enabled ephemeral preview environments for rapid infrastructure testing and validation.'
 			},
 			{
 				title: 'Load Testing Platform',
 				description:
-					'Built a load testing ecosystem using K6, GoReplay, and Kubernetes to run containerized distributed load tests against our systems to allow for gameday validation. This was built with ExpressJS, a Node Kubernetes Job, and a RemixJS frontend.'
+					'Architected and built a comprehensive load testing ecosystem using K6, GoReplay, and Kubernetes. Created containerized distributed load tests with ExpressJS backend, Node.js Kubernetes jobs, and RemixJS frontend. Enabled gameday validation and performance testing at scale.'
 			},
 			{
-				title: 'Traffic Replay',
+				title: 'Traffic Replay System',
 				description:
-					'This is a subcomponent of the load testing platform which uses Istio, PubSub, Big Query, GCS and GoReplay to re run captured traffic against our kubernetes clusters. We can capture all of our uncached (impactful) traffic and replay it agains the environment at a later date based on the timestamp. A nice added feature to this was the ability to perform writes (POST api calls) test data. I specifically built the replay mechanism for this with a NodeJS Job which leveraged GoReplay and has the business logic for re-running requests.'
+					'Developed sophisticated traffic replay system using Istio, PubSub, BigQuery, GCS, and GoReplay. Captured and replayed production traffic against test environments with timestamp-based replay capabilities. Built Node.js job runner with advanced business logic for request replay and test data handling.'
 			},
 			{
-				title: 'Flo Deploy',
+				title: 'Flo Deploy CLI',
 				description:
-					'A NodeJS Yargs CLI application which is shpped as a Google Cloud Build Builer and runs as a build step. This leverages Kustomize and a templating system to give easy out of the box deployments of applications with one command.'
+					'Created streamlined deployment CLI using Node.js and Yargs, shipped as Google Cloud Build Builder. Leveraged Kustomize and custom templating system to enable one-command application deployments with standardized configuration management.'
 			},
 			{
-				title: 'Datadog',
+				title: 'Observability Platform Migration',
 				description:
-					'Implemented datadog stack for our cloud stack and migrated the team from NewRelic APM, SignalFX Metrics, and ELK Logs to a single unified platform to inrease our deveoper productivity.'
+					'Spearheaded migration to Datadog unified observability platform from fragmented stack (NewRelic APM, SignalFX Metrics, ELK Logs). Significantly improved developer productivity through consolidated monitoring, alerting, and debugging capabilities.'
 			}
 		]
 	},
 	{
 		meta: {
-			title: 'Big Data (Hadoop) Platform Engineer',
+			title: 'Big Data Platform Engineer',
 			company: 'General Motors',
 			image:
 				'https://media.gm.com/dld/content/dam/Shared/Images/Logos/gm/GM_Gradient_Brandmark_RGB-2021.jpg/_jcr_content/renditions/cq5dam.web.1280.1280.jpeg',
@@ -55,17 +56,17 @@ export const workExperiences: WE[] = [
 			{
 				title: 'Yarn Queue Manager',
 				description:
-					'A simple, cron based, utility written in Go which would manage Queue schedules for the Yarn Resource Managers in our Clusters'
+					'Developed Go-based utility for automated Yarn Resource Manager queue scheduling. Implemented cron-based scheduling system to optimize cluster resource allocation and improve job execution efficiency across Hadoop clusters.'
 			},
 			{
-				title: 'Ranger/Atlas',
+				title: 'Security & Governance Implementation',
 				description:
-					'Led initiative to implement the Ranger and Atlas services into our Haoop Clusters. These allowee for us to implement RBAC into the Hadoop ecosystem at GM and gave tools to other teams to be able to manage users from common tools.'
+					'Led enterprise-wide initiative to implement Apache Ranger and Atlas services across Hadoop clusters. Established Role-Based Access Control (RBAC) framework and provided teams with self-service user management tools, significantly improving security posture and compliance.'
 			},
 			{
 				title: 'Hadoop Monitoring Stack',
 				description:
-					'With a collegue we built out a monitoring ecosystems for our clusters which had no visible metrics into a single unified platform. The frontend was a PHP/JS application built on top of Oracle and the backend was a python metrics collection system which leveraged Prometheus and Grafana for visualizations. This became the defacto way we looked at what was happening in our clusters.'
+					'Collaborated to build comprehensive monitoring ecosystem for previously invisible cluster metrics. Developed PHP/JavaScript frontend with Oracle backend and Python metrics collection system using Prometheus and Grafana. Became the standard platform for cluster observability and performance analysis.'
 			}
 		]
 	},
@@ -84,12 +85,12 @@ export const workExperiences: WE[] = [
 			{
 				title: 'Iodine Detection Kit',
 				description:
-					'NIH funded prototype of an iodine detection kit which would allow for cheap validation of water in regions with high rates of Hypothyroidism. The kit was built with a RaspberryPi, Ardruino and Colorimeter and had a QT interface built in Python.'
+					'Developed NIH-funded prototype for affordable water iodine detection in regions with high hypothyroidism rates. Built IoT solution using Raspberry Pi, Arduino, and colorimeter with Python-based Qt interface for field deployment and real-time analysis.'
 			},
 			{
 				title: 'Desalination Monitor',
 				description:
-					'Quick setup to validate a project to desalinated sea water to safe drinking standards. Was built with an Arduino, chips and sensors for pH and Salination to give visual feedback on the saftey of the water which came out of the desalination kit.'
+					'Created Arduino-based monitoring system for seawater desalination validation. Implemented pH and salinity sensors with visual feedback interface to ensure water safety standards, enabling rapid quality assessment of desalinated water output.'
 			}
 		]
 	}
