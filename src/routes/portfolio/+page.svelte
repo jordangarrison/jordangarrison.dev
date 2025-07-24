@@ -4,6 +4,24 @@
 	const projects = [
 		{
 			id: 1,
+			title: "hubctl",
+			description: "A comprehensive, production-ready CLI tool for GitHub administration with full API integration, multiple output formats, interactive prompts, and beautiful error handling.",
+			githubUrl: "https://github.com/jordangarrison/hubctl",
+			liveUrl: null,
+			downloadUrl: "https://github.com/jordangarrison/hubctl/releases/latest",
+			techStack: ["Ruby", "Thor", "Octokit", "TTY-Prompt", "TTY-Table", "TTY-Spinner", "Pastel"],
+			features: [
+				"🚀 Full GitHub API integration (Octokit)",
+				"🎨 Multiple output formats: table, JSON, list",
+				"🛡️ Comprehensive error handling with helpful messages",
+				"🎯 Interactive prompts and confirmation dialogs",
+				"⚡ Loading spinners for long-running operations",
+				"🔐 Flexible authentication via env vars or config file",
+				"🔄 Batch operations and scripting-friendly design"
+			]
+		},
+		{
+			id: 2,
 			title: "Let Me GPT That For You",
 			description: "A modern clone of 'Let me Google that for you' but for AI chat interfaces! Create shareable links that demonstrate different AI providers (ChatGPT, Gemini, Claude) with custom questions.",
 			githubUrl: "https://github.com/jordangarrison/let-me-gpt-that-for-you",
@@ -19,16 +37,15 @@
 			]
 		},
 		{
-			id: 2,
+			id: 3,
 			title: "What's My Status?",
-			description: "Multi-platform presence sharing application that allows you to set your status on multiple platforms (Slack, GitHub) at once. Available as both a CLI tool and GUI desktop application.",
+			description: "Multi-platform CLI tool that allows you to set your status on multiple platforms (Slack, GitHub) at once from the command line.",
 			githubUrl: "https://github.com/jordangarrison/whats-my-status",
 			liveUrl: null,
 			downloadUrl: "https://github.com/jordangarrison/whats-my-status/releases/latest",
-			techStack: ["Go", "Fyne", "CLI", "Desktop App", "YAML"],
+			techStack: ["Go", "CLI", "YAML"],
 			features: [
 				"🚀 Multi-platform support (Windows, macOS, Linux)",
-				"🖥️ Both CLI and GUI versions available",
 				"💬 Slack workspace status management",
 				"🐙 GitHub user status integration",
 				"⚡ Custom status aliases for quick setup",
