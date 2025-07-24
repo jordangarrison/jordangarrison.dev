@@ -8,88 +8,119 @@
 	<title>Hi I'm Jordan</title>
 </svelte:head>
 
-<div>
-	<Row>
-		<Col xs={12} sm={6} md={4} lg={4}>
-			<div class="profile-picture">
-				<Image
-					class="rounded-circle"
-					fluid
-					src="https://avatars.githubusercontent.com/u/22905777?v=4"
-					alt="profile-picture"
-				/>
-			</div>
-		</Col>
-
-		<Col xs={12} sm={6} md={8} lg={8}>
-			<div class="title">
-				<h1>Hi I'm Jordan</h1>
-				<h3>A Cloud Infrastructure Engineer</h3>
-			</div>
-		</Col>
-	</Row>
-</div>
-
-<div class="work-experience">
-	<h2 class="work-experience-h2">My Work Experience</h2>
-	{#each workExperiences as workExperience}
-		<WorkExperience workExperience={workExperience.meta}>
-			{#each workExperience.body as line}
-				<div class="work-experience-item">
-				<Row>
-					<Col xs={12} sm={12} md={2} lg={3}
-						><span class="we-item-title text-muted">{line.title}</span></Col
-					>
-					<Col xs={12} sm={12} md={10} lg={9}
-						><span class="we-item-description">{line.description}</span></Col
-					>
-					</Row>
+<div class="page-container">
+	<div class="hero-section">
+		<Row class="align-items-center">
+			<Col xs={12} sm={6} md={4} lg={4}>
+				<div class="profile-picture">
+					<Image
+						class="rounded-circle"
+						fluid
+						src="https://avatars.githubusercontent.com/u/22905777?v=4"
+						alt="profile-picture"
+					/>
 				</div>
-			{/each}
-		</WorkExperience>
-	{/each}
+			</Col>
+
+			<Col xs={12} sm={6} md={8} lg={8}>
+				<div class="title">
+					<h1>Hi I'm Jordan</h1>
+					<h3>A Cloud Infrastructure Engineer</h3>
+				</div>
+			</Col>
+		</Row>
+	</div>
+
+	<div class="work-experience-section">
+		<h2 class="section-title">My Work Experience</h2>
+		{#each workExperiences as workExperience}
+			<WorkExperience {workExperience} />
+		{/each}
+	</div>
 </div>
 
 <style>
+	.page-container {
+		width: 100%;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 2rem 1rem;
+	}
+
+	.hero-section {
+		margin-bottom: 4rem;
+	}
+
 	.profile-picture {
 		width: 100%;
 		max-width: 300px;
+		margin: 0 auto;
 	}
+
 	.title {
 		text-align: center;
-		margin-top: 50px;
+		padding: 2rem 0;
 	}
 
-	.work-experience {
-		margin-top: 50px;
+	.title h1 {
+		font-size: 2.5rem;
+		font-weight: 700;
+		color: #212529;
+		margin-bottom: 1rem;
 	}
 
-	.we-item-title {
-		font-size: 0.8em;
-		float: left;
+	.title h3 {
+		font-size: 1.5rem;
+		font-weight: 400;
+		color: #6c757d;
+		margin-bottom: 0;
 	}
 
-	.we-item-description {
-		float: left;
-		font-size: 0.8em;
+	.work-experience-section {
+		margin-top: 2rem;
 	}
 
-	.work-experience-item {
-		margin-bottom: 0.5rem;
-		padding: 0.25rem 0;
+	.section-title {
+		font-size: 2rem;
+		font-weight: 600;
+		color: #212529;
+		text-align: center;
+		margin-bottom: 3rem;
+		position: relative;
 	}
 
-	div {
-		padding: 1rem;
-		align-self: center;
-		align-items: center;
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		padding: 1rem;
-		width: 100%;
-		max-width: 1024px;
-		margin: 0 auto;
-		box-sizing: border-box;
+	.section-title::after {
+		content: '';
+		position: absolute;
+		bottom: -10px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 80px;
+		height: 3px;
+		background: #6c757d;
+		border-radius: 2px;
+	}
+
+	@media (max-width: 768px) {
+		.page-container {
+			padding: 1rem;
+		}
+
+		.title {
+			padding: 1rem 0;
+		}
+
+		.title h1 {
+			font-size: 2rem;
+		}
+
+		.title h3 {
+			font-size: 1.25rem;
+		}
+
+		.section-title {
+			font-size: 1.5rem;
+			margin-bottom: 2rem;
+		}
 	}
 </style>

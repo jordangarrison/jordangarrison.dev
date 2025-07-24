@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CardText, Col, Row } from '@sveltestrap/sveltestrap';
+	import { Row } from '@sveltestrap/sveltestrap';
 </script>
 
 <svelte:head>
