@@ -35,6 +35,24 @@
 				"⏰ Time-based status expiration",
 				"🔧 YAML-based configuration"
 			]
+		},
+		{
+			id: 3,
+			title: "hubctl",
+			description: "A comprehensive, production-ready CLI tool for GitHub administration with full API integration, multiple output formats, interactive prompts, and beautiful error handling.",
+			githubUrl: "https://github.com/jordangarrison/hubctl",
+			liveUrl: null,
+			downloadUrl: "https://github.com/jordangarrison/hubctl/releases/latest",
+			techStack: ["Ruby", "Thor", "Octokit", "TTY-Prompt", "TTY-Table", "TTY-Spinner", "Pastel"],
+			features: [
+				"🚀 Full GitHub API integration (Octokit)",
+				"🎨 Multiple output formats: table, JSON, list",
+				"🛡️ Comprehensive error handling with helpful messages",
+				"🎯 Interactive prompts and confirmation dialogs",
+				"⚡ Loading spinners for long-running operations",
+				"🔐 Flexible authentication via env vars or config file",
+				"🔄 Batch operations and scripting-friendly design"
+			]
 		}
 	];
 </script>
