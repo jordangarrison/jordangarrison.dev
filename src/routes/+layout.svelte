@@ -34,13 +34,13 @@
 		<div class="collapse navbar-collapse" class:show={isOpen}>
 			<Nav class="ms-auto" navbar>
 				<NavItem>
-					<NavLink href="/blog">Blog</NavLink>
+					<NavLink href="/experience">Experience</NavLink>
 				</NavItem>
 				<NavItem>
 					<NavLink href="/portfolio">Portfolio</NavLink>
 				</NavItem>
 				<NavItem>
-					<NavLink href="/about">About</NavLink>
+					<NavLink href="/blog">Blog</NavLink>
 				</NavItem>
 				<NavItem>
 					<NavLink href="/contact">Contact</NavLink>
@@ -63,13 +63,21 @@
 <footer>
 	<p>
 		<!-- Github link with github logo -->
-		<a href="https://github.com/jordangarrison" target="_blank" rel="noreferrer noopener" aria-label="GitHub Profile"
-			><i class="bi-github" role="img" aria-label="GitHub"></i></a
+		<a
+			href="https://github.com/jordangarrison"
+			target="_blank"
+			rel="noreferrer noopener"
+			aria-label="GitHub Profile"><i class="bi-github" role="img" aria-label="GitHub"></i></a
 		>
-		<a href="https://linkedin.com/in/jordan-garrison" target="_blank" rel="noreferrer noopener" aria-label="LinkedIn Profile"
-			><i class="bi bi-linkedin" aria-label="LinkedIn"></i></a
+		<a
+			href="https://linkedin.com/in/jordan-garrison"
+			target="_blank"
+			rel="noreferrer noopener"
+			aria-label="LinkedIn Profile"><i class="bi bi-linkedin" aria-label="LinkedIn"></i></a
 		>
-		<a href="mailto:hello@jordangarrison.dev" aria-label="Send Email"><i class="bi bi-envelope" aria-label="Email"></i></a>
+		<a href="mailto:hello@jordangarrison.dev" aria-label="Send Email"
+			><i class="bi bi-envelope" aria-label="Email"></i></a
+		>
 	</p>
 	<p>
 		&copy; {new Date().getFullYear()} <a href="https://jordangarrison.dev">jordangarrison.dev</a>
