@@ -20,7 +20,7 @@
 	let { workExperience }: Props = $props();
 </script>
 
-<div class="work-experience">
+<div class="work-experience" id={workExperience.meta.id}>
 	<Card class="work-experience-card">
 		<CardHeader class="work-experience-header">
 			<Row class="align-items-center">
@@ -37,6 +37,19 @@
 								{workExperience.meta.company}
 							</a>
 						</CardSubtitle>
+						{#if workExperience.meta.promotions && workExperience.meta.promotions.length > 0}
+							<div class="promotions">
+								{#each workExperience.meta.promotions as promotion, i}
+									<span class="promotion-item">
+										{promotion.title} ({promotion.date}){#if i < workExperience.meta.promotions.length - 1}<span
+												class="promotion-arrow"
+											>
+												→
+											</span>{/if}
+									</span>
+								{/each}
+							</div>
+						{/if}
 						<div class="employment-period">
 							<Badge color="secondary" class="date-badge">
 								{workExperience.meta.date.start} - {workExperience.meta.date.end}
@@ -133,6 +146,22 @@
 		text-decoration: underline;
 	}
 
+	.promotions {
+		margin-top: 0.5rem;
+		margin-bottom: 0.5rem;
+		font-size: 0.9rem;
+		color: #495057;
+		line-height: 1.6;
+	}
+
+	.promotion-item {
+		white-space: nowrap;
+	}
+
+	.promotion-arrow {
+		color: #6c757d;
+	}
+
 	.employment-period {
 		margin-top: 0.5rem;
 	}
@@ -188,6 +217,20 @@
 
 		:global(.company-name) {
 			font-size: 1rem;
+		}
+
+		.promotions {
+			font-size: 0.8rem;
+		}
+
+		.promotion-item {
+			display: block;
+			white-space: normal;
+		}
+
+		.promotion-arrow {
+			display: block;
+			margin: 0.25rem 0;
 		}
 
 		:global(.work-experience-header) {

@@ -3,14 +3,20 @@ import type { WE } from './WorkExperience.model';
 export const workExperiences: WE[] = [
 	{
 		meta: {
-			title: 'Tech Lead Manager',
+			id: 'flosports',
+			title: 'Tech Lead, SRE',
 			company: 'FloSports',
 			image: 'https://www.flosports.tv/wp-content/uploads/2020/04/Hawk-ignite.png',
 			url: 'https://www.flosports.tv',
 			date: {
 				start: 'November 2019',
 				end: 'Present'
-			}
+			},
+			promotions: [
+				{ title: 'Infrastructure Engineer', date: '2019' },
+				{ title: 'Senior Infrastructure Engineer', date: '2021' },
+				{ title: 'Tech Lead, SRE', date: '2023' }
+			]
 		},
 		body: [
 			{
@@ -19,29 +25,30 @@ export const workExperiences: WE[] = [
 					'Led the migration of FloSports infrastructure to Kubernetes using Infrastructure as Code (IaC) with Terraform. Built comprehensive business case, scoped requirements, and implemented full CI/CD pipeline for cross-cloud deployment. Enabled ephemeral preview environments for rapid infrastructure testing and validation.'
 			},
 			{
-				title: 'Load Testing Platform',
+				title: 'Cloud Consolidation & Service Migration',
 				description:
-					'Architected and built a comprehensive load testing ecosystem using K6, GoReplay, and Kubernetes. Created containerized distributed load tests with ExpressJS backend, Node.js Kubernetes jobs, and RemixJS frontend. Enabled gameday validation and performance testing at scale.'
+					'Led multi-phase GCP to AWS migration for the entire platform in partnership with AWS MAP program. Migrated core monolith and 30+ services to EKS using DMS with zero downtime.'
 			},
 			{
-				title: 'Traffic Replay System',
+				title: 'Load Testing & Traffic Engineering',
 				description:
-					'Developed sophisticated traffic replay system using Istio, PubSub, BigQuery, GCS, and GoReplay. Captured and replayed production traffic against test environments with timestamp-based replay capabilities. Built Node.js job runner with advanced business logic for request replay and test data handling.'
+					'Architected distributed load testing platform on Kubernetes using K6 and GoReplay. Built traffic replay system using Istio, PubSub, and BigQuery for production traffic capture and replay. Validated readiness for major streaming events including ADCC and Wrestling Big Weekend. Currently building v2 leveraging the K6 Operator with a dedicated UI.'
 			},
 			{
-				title: 'Flo Deploy CLI',
+				title: 'Observability & Reliability',
 				description:
-					'Created streamlined deployment CLI using Node.js and Yargs, shipped as Google Cloud Build Builder. Leveraged Kustomize and custom templating system to enable one-command application deployments with standardized configuration management.'
+					'Established uptime baseline and SLOs across all FloSports platforms. Migrated to Datadog unified observability from fragmented stack (NewRelic, SignalFX, ELK). Built Datadog Scorecards for customer-impacting services.'
 			},
 			{
-				title: 'Observability Platform Migration',
+				title: 'SRE Team Transformation',
 				description:
-					'Spearheaded migration to Datadog unified observability platform from fragmented stack (NewRelic APM, SignalFX Metrics, ELK Logs). Significantly improved developer productivity through consolidated monitoring, alerting, and debugging capabilities.'
+					'Led transformation of Infrastructure Engineering team to Site Reliability Engineering, adopting principles from the Google SRE book. Established a code-first, developer productivity focused team with emphasis on stability and performance.'
 			}
 		]
 	},
 	{
 		meta: {
+			id: 'gm',
 			title: 'Big Data Platform Engineer',
 			company: 'General Motors',
 			image:
@@ -50,7 +57,11 @@ export const workExperiences: WE[] = [
 			date: {
 				start: 'May 2017',
 				end: 'November 2019'
-			}
+			},
+			promotions: [
+				{ title: 'L5 Big Data Platform Engineer', date: '2017' },
+				{ title: 'L6 Big Data Platform Engineer', date: '2019' }
+			]
 		},
 		body: [
 			{
@@ -72,6 +83,7 @@ export const workExperiences: WE[] = [
 	},
 	{
 		meta: {
+			id: 'lynntech',
 			title: 'Lab Technician',
 			company: 'Lynntech',
 			image: 'https://www.lynntech.com/wp-content/uploads/2016/04/HeaderLogo_Tiny.png',
