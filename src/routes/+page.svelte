@@ -48,23 +48,13 @@
 	<section class="journey-section">
 		<h2>My Journey</h2>
 		<div class="journey-timeline">
-			<div class="journey-item">
-				<div class="journey-year">2012-2017</div>
+			<a href="/experience#flosports" class="journey-item journey-link">
+				<div class="journey-year">2019-Present</div>
 				<div class="journey-content">
-					<strong>Texas A&M University</strong>
+					<strong>FloSports</strong>
 					<p>
-						B.S. Physics with Math Minor. Started with Higgs Boson simulations in the Department of
-						Physics and Astronomy, running C++ and Bash on distributed computing clusters.
-					</p>
-				</div>
-			</div>
-			<a href="/experience#lynntech" class="journey-item journey-link">
-				<div class="journey-year">2016-2017</div>
-				<div class="journey-content">
-					<strong>Lynntech</strong>
-					<p>
-						Research Technician building IoT prototypes with Python, Arduino, and Raspberry Pi.
-						Hardware meets software.
+						From Infrastructure Engineer to Tech Lead, SRE. Building developer platforms, driving
+						cloud migrations, and establishing SRE practices.
 					</p>
 				</div>
 			</a>
@@ -78,16 +68,26 @@
 					</p>
 				</div>
 			</a>
-			<a href="/experience#flosports" class="journey-item journey-link">
-				<div class="journey-year">2019-Present</div>
+			<a href="/experience#lynntech" class="journey-item journey-link">
+				<div class="journey-year">2016-2017</div>
 				<div class="journey-content">
-					<strong>FloSports</strong>
+					<strong>Lynntech</strong>
 					<p>
-						From Infrastructure Engineer to Tech Lead, SRE. Building developer platforms, driving
-						cloud migrations, and establishing SRE practices.
+						Research Technician building IoT prototypes with Python, Arduino, and Raspberry Pi.
+						Hardware meets software.
 					</p>
 				</div>
 			</a>
+			<div class="journey-item">
+				<div class="journey-year">2012-2017</div>
+				<div class="journey-content">
+					<strong>Texas A&M University</strong>
+					<p>
+						B.S. Physics with Math Minor. Started with Higgs Boson simulations in the Department of
+						Physics and Astronomy, running C++ and Bash on distributed computing clusters.
+					</p>
+				</div>
+			</div>
 		</div>
 	</section>
 
