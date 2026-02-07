@@ -63,11 +63,11 @@ export const toolsProjects: PortfolioProject[] = [
 		techStack: ['TypeScript', 'Bun', 'Elysia', 'htmx', 'SQLite'],
 		features: [
 			'Import 4.6M+ Apple Health records',
-			'MacroFactor nutrition analysis',
+			'MacroFactor nutrition analysis with 52 micronutrients',
 			'Interactive charts for 100+ health metrics',
-			'Workout GPS route visualization',
-			'ECG waveform display',
-			'Self-hosted and privacy-focused'
+			'Workout GPS route visualization with Leaflet.js',
+			'ECG waveform display and FHIR clinical records',
+			'Multi-user support, self-hosted and privacy-focused'
 		]
 	},
 	{
@@ -82,10 +82,10 @@ export const toolsProjects: PortfolioProject[] = [
 		features: [
 			'Local speech-to-text transcription',
 			'No cloud required - fully offline',
-			'TUI with visual feedback',
-			'Auto-paste to clipboard',
-			'Automatic model downloading',
-			'Nix flake packaging'
+			'TUI with visual feedback and audio level meter',
+			'Auto-paste to clipboard with window manager integration',
+			'Automatic model downloading and management',
+			'XDG-compliant configuration with Nix flake packaging'
 		]
 	}
 ];
@@ -95,7 +95,7 @@ export const nixProjects: PortfolioProject[] = [
 		id: 4,
 		title: 'nix-config',
 		description:
-			'My personal Nix configurations for reproducible system setups across all my machines.',
+			'My personal nix configurations for the computers I use.',
 		githubUrl: 'https://github.com/jordangarrison/nix-config',
 		liveUrl: null,
 		downloadUrl: null,
@@ -206,6 +206,39 @@ export const aiProjects: PortfolioProject[] = [
 			'Shareable pre-filled prompt links',
 			'Realistic chat simulation',
 			'Responsive modern UI'
+		]
+	},
+	{
+		id: 13,
+		title: 'wiggle-puppy',
+		description:
+			'A Ralph Wiggum loop implementation - autonomous AI agent loop runner that repeatedly executes an AI agent until task completion.',
+		githubUrl: 'https://github.com/jordangarrison/wiggle-puppy',
+		liveUrl: null,
+		downloadUrl: null,
+		techStack: ['Rust', 'CLI', 'AI Agents', 'Nix'],
+		features: [
+			'Stateful prompts re-read each iteration',
+			'PRD tracking with story-based progress',
+			'Automatic completion detection',
+			'Event-driven architecture for TUI/CLI',
+			'Graceful cancellation support'
+		]
+	},
+	{
+		id: 14,
+		title: 'panko',
+		description:
+			'Breadcrumbs for AI coding sessions - view and share Claude Code transcripts via web viewer and tunnels.',
+		githubUrl: 'https://github.com/jordangarrison/panko',
+		liveUrl: null,
+		downloadUrl: null,
+		techStack: ['Rust', 'Web', 'Cloudflare Tunnels', 'Nix'],
+		features: [
+			'View Claude Code sessions in web browser',
+			'Share sessions via Cloudflare, ngrok, or Tailscale tunnels',
+			'TUI for browsing session transcripts',
+			'Nix flake with configurable tunnel providers'
 		]
 	}
 ];
