@@ -87,6 +87,23 @@ export const toolsProjects: PortfolioProject[] = [
 			'Automatic model downloading and management',
 			'XDG-compliant configuration with Nix flake packaging'
 		]
+	},
+	{
+		id: 15,
+		title: 'greenlight',
+		description:
+			'GitHub Actions workflow visualizer built with Phoenix LiveView. View CI/CD pipelines as interactive DAGs.',
+		githubUrl: 'https://github.com/jordangarrison/greenlight',
+		liveUrl: null,
+		downloadUrl: null,
+		techStack: ['Elixir', 'Phoenix LiveView', 'Svelte', 'Nix'],
+		features: [
+			'Interactive DAG visualization of workflows',
+			'Real-time polling of workflow run status',
+			'Expandable job nodes with dependency graphs',
+			'Dashboard for followed orgs and bookmarked repos',
+			'Pipeline view per commit with dependency resolution'
+		]
 	}
 ];
 
