@@ -87,6 +87,40 @@ export const toolsProjects: PortfolioProject[] = [
 			'Automatic model downloading',
 			'Nix flake packaging'
 		]
+	},
+	{
+		id: 13,
+		title: 'panko',
+		description:
+			'Breadcrumbs for AI coding sessions - view and share Claude Code transcripts via web viewer and tunnel sharing.',
+		githubUrl: 'https://github.com/jordangarrison/panko',
+		liveUrl: null,
+		downloadUrl: null,
+		techStack: ['Rust', 'HTML', 'CSS', 'Nix'],
+		features: [
+			'View AI coding agent sessions in the browser',
+			'Share sessions via Cloudflare, ngrok, or Tailscale tunnels',
+			'Web-based session viewer',
+			'Configurable tunnel providers and defaults',
+			'Nix flake packaging with optional providers'
+		]
+	},
+	{
+		id: 14,
+		title: 'greenlight',
+		description:
+			'GitHub Actions workflow visualizer built with Phoenix LiveView. View CI/CD pipelines as interactive DAGs.',
+		githubUrl: 'https://github.com/jordangarrison/greenlight',
+		liveUrl: null,
+		downloadUrl: null,
+		techStack: ['Elixir', 'Phoenix LiveView', 'Svelte', 'Nix'],
+		features: [
+			'Interactive DAG visualization of workflows',
+			'Real-time polling of workflow run status',
+			'Expandable job nodes with dependency graphs',
+			'Dashboard for followed orgs and bookmarked repos',
+			'Pipeline view per commit with dependency resolution'
+		]
 	}
 ];
 
@@ -206,6 +240,24 @@ export const aiProjects: PortfolioProject[] = [
 			'Shareable pre-filled prompt links',
 			'Realistic chat simulation',
 			'Responsive modern UI'
+		]
+	},
+	{
+		id: 15,
+		title: 'wiggle-puppy',
+		description:
+			'Autonomous AI agent loop runner - repeatedly runs an AI agent with a prompt, tracking progress via PRD files until completion.',
+		githubUrl: 'https://github.com/jordangarrison/wiggle-puppy',
+		liveUrl: null,
+		downloadUrl: null,
+		techStack: ['Rust', 'CLI', 'Nix'],
+		features: [
+			'Autonomous agent loop with configurable iterations',
+			'Stateful prompts re-read each iteration',
+			'PRD tracking for story-based progress management',
+			'Automatic completion detection',
+			'Event-driven architecture for easy integration',
+			'Nix flake packaging'
 		]
 	}
 ];
