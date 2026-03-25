@@ -1,7 +1,6 @@
 import type { APIContext } from 'astro';
 import { getCollection } from 'astro:content';
 import { projectGroups } from '../data/portfolio';
-import { workExperiences } from '../data/workExperience';
 
 export async function GET(context: APIContext) {
   const site = context.site!.toString().replace(/\/$/, '');
@@ -10,6 +9,10 @@ export async function GET(context: APIContext) {
   const publishedPosts = allPosts
     .filter((post) => post.data.published)
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+  const experiences = (await getCollection('experience'))
+    .filter((e) => e.data.category === 'professional')
+    .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 
   const lines: string[] = [
     '# jordangarrison.dev',
@@ -35,9 +38,9 @@ export async function GET(context: APIContext) {
     '',
     '## Experience',
     `- [Experience](${site}/experience)`,
-    ...workExperiences.map(
-      (we) =>
-        `- ${we.meta.company} — ${we.meta.title} (${we.meta.date.start}–${we.meta.date.end})`
+    ...experiences.map(
+      (e) =>
+        `- ${e.data.company} — ${e.data.title} (${e.data.startDate}–${e.data.endDate ?? 'Present'})`
     ),
     '',
     '## Contact',

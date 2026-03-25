@@ -1,7 +1,6 @@
 import type { APIContext } from 'astro';
 import { getCollection } from 'astro:content';
 import { projectGroups } from '../data/portfolio';
-import { workExperiences } from '../data/workExperience';
 
 export async function GET(context: APIContext) {
   const site = context.site!.toString().replace(/\/$/, '');
@@ -10,6 +9,9 @@ export async function GET(context: APIContext) {
   const publishedPosts = allPosts
     .filter((post) => post.data.published)
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+  const experiences = (await getCollection('experience'))
+    .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 
   const sections: string[] = [];
 
@@ -27,7 +29,10 @@ export async function GET(context: APIContext) {
   sections.push(
     '## About',
     '',
-    'Passionate about my family, Open Source, Linux, Jiu Jitsu, and being actively involved in my local church.',
+    '- I build platforms that make engineers fast and infrastructure boring.',
+    '- I tame infrastructure complexity so your engineers can focus on the product.',
+    '- I turn "we need SRE to do that" into "I just deployed it myself."',
+    '- I build the platforms that turn infrastructure from a bottleneck into a superpower.',
     '',
     '"Complexity very bad. Say no to complexity."',
     '',
@@ -57,22 +62,28 @@ export async function GET(context: APIContext) {
 
   // Work Experience
   sections.push('## Work Experience', '');
-  for (const we of workExperiences) {
+  for (const entry of experiences) {
     sections.push(
-      `### ${we.meta.company} — ${we.meta.title}`,
-      `${we.meta.date.start}–${we.meta.date.end}`,
-      `${we.meta.url}`,
+      `### ${entry.data.company} — ${entry.data.title}`,
+      `${entry.data.startDate}–${entry.data.endDate ?? 'Present'}`,
+      ...(entry.data.url ? [entry.data.url] : []),
       ''
     );
-    if (we.meta.promotions) {
+    if (entry.data.promotions) {
       sections.push(
         '**Promotions:**',
-        ...we.meta.promotions.map((p) => `- ${p.title} (${p.date})`),
+        ...entry.data.promotions.map((p) => `- ${p.title} (${p.date})`),
         ''
       );
     }
-    for (const item of we.body) {
-      sections.push(`**${item.title}**`, item.description, '');
+    if (entry.data.highlights) {
+      for (const h of entry.data.highlights) {
+        sections.push(`**${h.title}**`, h.description, '');
+      }
+    }
+    // Include the full markdown body for entries that have it (e.g., FloSports detailed projects)
+    if (entry.body && entry.body.trim()) {
+      sections.push(entry.body, '');
     }
   }
 

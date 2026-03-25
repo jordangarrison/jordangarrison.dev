@@ -1,7 +1,18 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import WorkExperience from '../components/WorkExperience.astro';
-import { workExperiences } from '../data/workExperience';
+import OtherExperience from '../components/OtherExperience.astro';
+import { getCollection, render } from 'astro:content';
+
+const allExperience = await getCollection('experience');
+
+const professional = allExperience
+  .filter((e) => e.data.category === 'professional')
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const other = allExperience
+  .filter((e) => e.data.category === 'other')
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 ---
 
 <BaseLayout title="Experience - Jordan Garrison">
@@ -12,9 +23,37 @@ import { workExperiences } from '../data/workExperience';
     </div>
 
     <div class="space-y-8">
-      {workExperiences.map((we) => (
-        <WorkExperience workExperience={we} />
-      ))}
+      {professional.map(async (entry) => {
+        const hasBody = !!(entry.body && entry.body.trim().length > 0);
+        const { Content } = hasBody ? await render(entry) : { Content: null };
+
+        return (
+          <WorkExperience
+            id={entry.id}
+            company={entry.data.company}
+            title={entry.data.title}
+            image={entry.data.image}
+            url={entry.data.url}
+            startDate={entry.data.startDate}
+            endDate={entry.data.endDate}
+            promotions={entry.data.promotions}
+            highlights={entry.data.highlights}
+          >
+            {Content && <Content />}
+          </WorkExperience>
+        );
+      })}
     </div>
+
+    {other.length > 0 && (
+      <OtherExperience
+        experiences={other.map((e) => ({
+          company: e.data.company,
+          title: e.data.title,
+          startDate: e.data.startDate,
+          endDate: e.data.endDate,
+        }))}
+      />
+    )}
   </div>
 </BaseLayout>
