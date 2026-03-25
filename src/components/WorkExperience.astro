@@ -1,93 +1,196 @@
 ---
-import type { WE } from '../data/workExperience';
-
-interface Props {
-  workExperience: WE;
+interface Highlight {
+  title: string;
+  description: string;
 }
 
-const { workExperience } = Astro.props;
-const { meta, body } = workExperience;
+interface Promotion {
+  title: string;
+  date: string;
+}
+
+interface Props {
+  id: string;
+  company: string;
+  title: string;
+  image?: string;
+  url?: string;
+  startDate: string;
+  endDate: string | null;
+  promotions?: Promotion[];
+  highlights?: Highlight[];
+}
+
+const {
+  id,
+  company,
+  title,
+  image,
+  url,
+  startDate,
+  endDate,
+  promotions,
+  highlights,
+} = Astro.props;
+
+const hasExpandedContent = Astro.slots.has('default');
+
+// Format dates for display: "2019-11" -> "Nov 2019"
+function formatDate(dateStr: string): string {
+  const [year, month] = dateStr.split('-');
+  const date = new Date(parseInt(year), parseInt(month) - 1);
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+
+const displayStart = formatDate(startDate);
+const displayEnd = endDate ? formatDate(endDate) : 'Present';
+
+// Reverse promotions for display (newest first)
+const displayPromotions = promotions ? [...promotions].reverse() : [];
 ---
 
-<div id={meta.id}>
+<div id={id}>
   <div class="bg-rp-surface rounded-xl overflow-hidden border border-rp-highlight-med hover:border-rp-rose/50 transition-all duration-300">
-    <!-- Card Header -->
-    <div class="p-6 border-b border-rp-highlight-low">
-      <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5">
-        <!-- Company Logo -->
-        <img
-          src={meta.image}
-          alt={`${meta.company} logo`}
-          width="80"
-          height="80"
-          class="w-20 h-20 rounded-lg bg-white border border-rp-highlight-med object-contain p-2 shrink-0"
-        />
+    <div class="flex">
+      {/* Timeline accent bar */}
+      <div class="w-1 bg-gradient-to-b from-rp-rose to-rp-iris rounded-l-xl shrink-0"></div>
 
-        <!-- Info Section -->
-        <div class="flex-1 text-center sm:text-left">
-          <h3 class="text-xl font-bold text-rp-text">{meta.title}</h3>
-          <a
-            href={meta.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-rp-rose hover:text-rp-love transition-colors font-medium"
-          >
-            {meta.company}
-          </a>
-
-          {meta.promotions && meta.promotions.length > 1 && (
-            <>
-              {/* Desktop: horizontal promotion chain */}
-              <div class="hidden sm:flex flex-wrap items-center gap-1 mt-2">
-                {meta.promotions.map((promo, i) => (
-                  <>
-                    <span class="text-sm text-rp-subtle">
-                      {promo.title}
-                      <span class="text-rp-muted font-mono"> ({promo.date})</span>
-                    </span>
-                    {i < meta.promotions!.length - 1 && (
-                      <span class="text-rp-muted mx-1">&rarr;</span>
-                    )}
-                  </>
-                ))}
-              </div>
-
-              {/* Mobile: vertical promotion chain */}
-              <div class="flex sm:hidden flex-col items-center gap-1 mt-2">
-                {meta.promotions.map((promo, i) => (
-                  <>
-                    <span class="text-sm text-rp-subtle">
-                      {promo.title}
-                      <span class="text-rp-muted font-mono"> ({promo.date})</span>
-                    </span>
-                    {i < meta.promotions!.length - 1 && (
-                      <span class="text-rp-muted">&darr;</span>
-                    )}
-                  </>
-                ))}
-              </div>
-            </>
+      <div class="flex-1 p-6">
+        {/* Card header */}
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5 mb-5">
+          {image && (
+            <img
+              src={image}
+              alt={`${company} logo`}
+              width="64"
+              height="64"
+              class="w-16 h-16 rounded-lg bg-white border border-rp-highlight-med object-contain p-2 shrink-0"
+            />
           )}
-
-          <div class="mt-3">
-            <span class="bg-rp-highlight-low text-rp-subtle text-sm px-3 py-1 rounded-full font-mono inline-block">
-              {meta.date.start} &ndash; {meta.date.end}
+          <div class="flex-1 text-center sm:text-left">
+            <h3 class="text-xl font-bold text-rp-text">{title}</h3>
+            {url ? (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-rp-rose hover:text-rp-love transition-colors font-medium"
+              >
+                {company}
+              </a>
+            ) : (
+              <span class="text-rp-rose font-medium">{company}</span>
+            )}
+            <span class="text-rp-muted font-mono text-sm ml-2">
+              · {displayStart} &ndash; {displayEnd}
             </span>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Card Body -->
-    <div class="p-6">
-      <div class="space-y-4">
-        {body.map((achievement) => (
-          <div class="p-4 rounded-lg bg-rp-base border border-rp-highlight-low hover:border-rp-highlight-med transition-colors">
-            <h4 class="text-base font-semibold text-rp-text mb-2">{achievement.title}</h4>
-            <p class="text-sm text-rp-subtle leading-relaxed">{achievement.description}</p>
+        {/* Promotion timeline */}
+        {displayPromotions.length > 1 && (
+          <div class="flex flex-col gap-1.5 mb-5 pl-1">
+            {displayPromotions.map((promo, i) => (
+              <div class="flex items-center gap-2">
+                <div
+                  class:list={[
+                    'rounded-full shrink-0',
+                    i === 0 ? 'w-2 h-2 bg-rp-rose' : 'w-1.5 h-1.5 bg-rp-muted',
+                  ]}
+                />
+                <span
+                  class:list={[
+                    'text-sm',
+                    i === 0 ? 'text-rp-rose' : 'text-rp-muted',
+                  ]}
+                >
+                  {promo.date} &mdash; {promo.title}
+                </span>
+              </div>
+            ))}
           </div>
-        ))}
+        )}
+
+        {/* Key highlights */}
+        {highlights && highlights.length > 0 && (
+          <div class="space-y-3 mb-4">
+            {highlights.map((highlight) => (
+              <div class="p-4 rounded-lg bg-rp-base border-l-[3px] border-rp-rose">
+                <h4 class="text-base font-semibold text-rp-text mb-1">{highlight.title}</h4>
+                <p class="text-sm text-rp-subtle leading-relaxed">{highlight.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Expandable accordion for full project details (rendered via slot) */}
+        {hasExpandedContent && (
+          <details class="mt-4">
+            <summary class="cursor-pointer text-sm text-rp-rose hover:text-rp-love transition-colors text-center select-none">
+              Show all projects
+            </summary>
+            <div class="mt-4 pt-4 border-t border-rp-highlight-low">
+              <div class="experience-prose prose prose-sm max-w-none">
+                <slot />
+              </div>
+            </div>
+          </details>
+        )}
       </div>
     </div>
   </div>
 </div>
+
+<style is:global>
+  .experience-prose {
+    color: var(--rp-text);
+
+    & h2 {
+      color: var(--rp-text);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    & h2:first-child {
+      margin-top: 0;
+    }
+
+    & strong {
+      color: var(--rp-text);
+    }
+
+    & a {
+      color: var(--rp-rose);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    & a:hover {
+      color: var(--rp-love);
+    }
+
+    & ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    & ul > li {
+      color: var(--rp-subtle);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      padding-left: 0.75rem;
+      border-left: 2px solid var(--rp-highlight-low);
+      margin-bottom: 0.5rem;
+    }
+
+    & ul > li::marker {
+      content: none;
+    }
+
+    & p {
+      color: var(--rp-subtle);
+      font-size: 0.875rem;
+    }
+  }
+</style>
