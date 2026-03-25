@@ -29,7 +29,10 @@ export async function GET(context: APIContext) {
   sections.push(
     '## About',
     '',
-    'Passionate about my family, Open Source, Linux, Jiu Jitsu, and being actively involved in my local church.',
+    '- I build platforms that make engineers fast and infrastructure boring.',
+    '- I tame infrastructure complexity so your engineers can focus on the product.',
+    '- I turn "we need SRE to do that" into "I just deployed it myself."',
+    '- I build the platforms that turn infrastructure from a bottleneck into a superpower.',
     '',
     '"Complexity very bad. Say no to complexity."',
     '',

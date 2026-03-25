@@ -36,9 +36,7 @@ function formatYearRange(start: string, end: string | null): string {
     <!-- Intro Section -->
     <section class="mb-16">
       <div class="bg-rp-surface rounded-xl p-6">
-        <p class="text-rp-text leading-relaxed mb-4">
-          Passionate about my family, Open Source, Linux, Jiu Jitsu, and being actively involved in my local church.
-        </p>
+        <p id="tagline" class="text-rp-text leading-relaxed mb-4"></p>
         <p class="italic text-rp-iris">
           <a href="https://grugbrain.dev" target="_blank" rel="noopener noreferrer" class="text-rp-iris hover:text-rp-iris/80 no-underline hover:underline">
             "Complexity very bad. Say no to complexity."
@@ -176,3 +174,14 @@ function formatYearRange(start: string, end: string | null): string {
 
   </div>
 </BaseLayout>
+
+<script>
+  const taglines = [
+    "I build platforms that make engineers fast and infrastructure boring.",
+    "I tame infrastructure complexity so your engineers can focus on the product.",
+    "I turn \"we need SRE to do that\" into \"I just deployed it myself.\"",
+    "I build the platforms that turn infrastructure from a bottleneck into a superpower.",
+  ];
+  const el = document.getElementById('tagline');
+  if (el) el.textContent = taglines[Math.floor(Math.random() * taglines.length)];
+</script>
