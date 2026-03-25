@@ -1,0 +1,37 @@
+---
+interface ExperienceEntry {
+  company: string;
+  title: string;
+  startDate: string;
+  endDate: string | null;
+}
+
+interface Props {
+  experiences: ExperienceEntry[];
+}
+
+const { experiences } = Astro.props;
+
+function formatYear(dateStr: string): string {
+  return dateStr.split('-')[0];
+}
+---
+
+<div class="mt-12">
+  <h2 class="text-xl font-semibold text-rp-text mb-1">Other Experience</h2>
+  <p class="text-sm text-rp-muted mb-6">Earlier roles that shaped my work ethic</p>
+
+  <div class="divide-y divide-rp-highlight-low">
+    {experiences.map((exp) => (
+      <div class="py-3 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+        <div>
+          <span class="text-rp-text font-medium">{exp.title}</span>
+          <span class="text-rp-muted text-sm"> · {exp.company}</span>
+        </div>
+        <span class="text-rp-muted text-sm font-mono shrink-0">
+          {formatYear(exp.startDate)}&ndash;{exp.endDate ? formatYear(exp.endDate) : 'Present'}
+        </span>
+      </div>
+    ))}
+  </div>
+</div>
