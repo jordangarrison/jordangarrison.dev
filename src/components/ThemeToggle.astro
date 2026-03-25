@@ -1,13 +1,11 @@
 <button
-  id="theme-toggle"
   type="button"
-  class="p-2 rounded-lg hover:bg-rp-highlight-low transition-colors cursor-pointer"
+  class="theme-toggle p-2 rounded-lg hover:bg-rp-highlight-low transition-colors cursor-pointer"
   aria-label="Toggle theme"
 >
   <!-- Sun icon (shown in dark mode — click to go light) -->
   <svg
-    id="sun-icon"
-    class="w-5 h-5 text-rp-gold hidden"
+    class="theme-sun w-5 h-5 text-rp-gold hidden"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -25,8 +23,7 @@
   </svg>
   <!-- Moon icon (shown in light mode — click to go dark) -->
   <svg
-    id="moon-icon"
-    class="w-5 h-5 text-rp-iris hidden"
+    class="theme-moon w-5 h-5 text-rp-iris hidden"
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
@@ -37,31 +34,30 @@
 </button>
 
 <script>
-  function initThemeToggle() {
-    const toggle = document.getElementById('theme-toggle');
-    const sunIcon = document.getElementById('sun-icon');
-    const moonIcon = document.getElementById('moon-icon');
+  function initThemeToggles() {
+    const toggles = document.querySelectorAll('.theme-toggle');
+    const sunIcons = document.querySelectorAll('.theme-sun');
+    const moonIcons = document.querySelectorAll('.theme-moon');
 
     function updateIcons() {
       const isDark = document.documentElement.classList.contains('dark');
-      if (sunIcon && moonIcon) {
-        sunIcon.classList.toggle('hidden', !isDark);
-        moonIcon.classList.toggle('hidden', isDark);
-      }
+      sunIcons.forEach(icon => icon.classList.toggle('hidden', !isDark));
+      moonIcons.forEach(icon => icon.classList.toggle('hidden', isDark));
     }
 
     updateIcons();
 
-    toggle?.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.contains('dark');
-      document.documentElement.classList.remove('light', 'dark');
-      const newTheme = isDark ? 'light' : 'dark';
-      document.documentElement.classList.add(newTheme);
-      localStorage.setItem('theme', newTheme);
-      updateIcons();
+    toggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        document.documentElement.classList.remove('light', 'dark');
+        const newTheme = isDark ? 'light' : 'dark';
+        document.documentElement.classList.add(newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateIcons();
+      });
     });
   }
 
-  initThemeToggle();
-  document.addEventListener('astro:after-swap', initThemeToggle);
+  initThemeToggles();
 </script>
