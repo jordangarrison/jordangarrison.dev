@@ -19,11 +19,11 @@ highlights:
   - title: "GCP to AWS Cloud Migration"
     description: "Architected and executed full cloud consolidation from GCP to AWS. Migrated 20+ services including databases, caches, and CI/CD pipelines to EKS with zero downtime. Created self-service migration templates for teams."
   - title: "Load Testing Platform"
-    description: "Built distributed K6 load testing platform from scratch across 4+ phases. Evolved to Kubernetes-native with K6 Operator, dedicated UI, CI/CD integration, and browser-level tests. Validates readiness for major live sporting events."
+    description: "Built distributed K6 load testing platform from scratch across 4+ phases. Built traffic replay system using GoReplay, Istio, PubSub, and BigQuery for production traffic capture and replay. Evolved to Kubernetes-native with K6 Operator, dedicated UI, CI/CD integration, and browser-level tests. Validates readiness for major live sporting events."
   - title: "Developer Experience Platform"
     description: "Built flo-deploy, opinionated Helm charts, and infrastructure-manifests to give developers a paved road to production. Authored RFC for Crossplane-based self-service platform."
   - title: "Observability & SRE Transformation"
-    description: "Led org-wide Datadog migration and restructured team from DevOps/Infra to SRE to align outcomes with business goals. Established SLO-based culture with per-service reliability reporting, scorecards, and incident response frameworks."
+    description: "Migrated to Datadog unified observability from fragmented stack (NewRelic, SignalFX, ELK) and restructured team from DevOps/Infra to SRE to align outcomes with business goals. Established SLO-based culture with per-service reliability reporting, scorecards, and incident response frameworks."
 ---
 
 ## Infrastructure as Code

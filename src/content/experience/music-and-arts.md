@@ -1,7 +1,7 @@
 ---
 company: "Music and Arts"
 title: "Instrument Repair Technician"
-startDate: "2015-01"
+startDate: "2013-01"
 endDate: "2016-01"
 sortOrder: 4
 category: "other"

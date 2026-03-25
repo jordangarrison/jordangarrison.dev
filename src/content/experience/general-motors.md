@@ -19,5 +19,5 @@ highlights:
   - title: "Yarn Queue Manager"
     description: "Built Go-based utility for automated Yarn queue scheduling. Optimized cluster resource allocation between data science workloads during business hours and batch reporting off-hours."
   - title: "Hadoop Monitoring Stack"
-    description: "Built comprehensive monitoring ecosystem with Prometheus and Grafana for previously invisible cluster metrics. Became the standard platform for cluster observability and performance analysis."
+    description: "Built comprehensive monitoring ecosystem with PHP/JavaScript frontend, Oracle backend, and Python metrics collection system using Prometheus and Grafana for previously invisible cluster metrics. Became the standard platform for cluster observability and performance analysis."
 ---
