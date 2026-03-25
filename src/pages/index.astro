@@ -1,5 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const professional = (await getCollection('experience'))
+  .filter((e) => e.data.category === 'professional')
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+function formatYearRange(start: string, end: string | null): string {
+  const startYear = start.split('-')[0];
+  const endYear = end ? end.split('-')[0] : 'Present';
+  return `${startYear}\u2013${endYear}`;
+}
 ---
 
 <BaseLayout title="Jordan Garrison">
@@ -42,37 +53,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         My Journey
       </h2>
       <div class="border-l-2 border-rp-rose ml-4 pl-8 space-y-8">
-        <!-- FloSports -->
-        <a href="/experience#flosports" class="block group relative hover:-translate-y-0.5 transition-transform duration-200">
-          <div class="absolute -left-[2.6rem] top-1.5 w-3 h-3 rounded-full bg-rp-rose ring-4 ring-rp-base"></div>
-          <p class="text-sm font-mono text-rp-muted mb-1">2019&ndash;Present</p>
-          <h3 class="text-lg font-semibold text-rp-text group-hover:text-rp-rose transition-colors">FloSports</h3>
-          <p class="text-rp-subtle leading-relaxed">
-            From Infrastructure Engineer to Tech Lead, SRE. Building developer platforms, driving cloud migrations, and establishing SRE practices.
-          </p>
-        </a>
+        {professional.map((entry) => (
+          <a href={`/experience#${entry.id}`} class="block group relative hover:-translate-y-0.5 transition-transform duration-200">
+            <div class="absolute -left-[2.6rem] top-1.5 w-3 h-3 rounded-full bg-rp-rose ring-4 ring-rp-base"></div>
+            <p class="text-sm font-mono text-rp-muted mb-1">{formatYearRange(entry.data.startDate, entry.data.endDate)}</p>
+            <h3 class="text-lg font-semibold text-rp-text group-hover:text-rp-rose transition-colors">{entry.data.company}</h3>
+            <p class="text-rp-subtle leading-relaxed">{entry.data.summary}</p>
+          </a>
+        ))}
 
-        <!-- General Motors -->
-        <a href="/experience#gm" class="block group relative hover:-translate-y-0.5 transition-transform duration-200">
-          <div class="absolute -left-[2.6rem] top-1.5 w-3 h-3 rounded-full bg-rp-rose ring-4 ring-rp-base"></div>
-          <p class="text-sm font-mono text-rp-muted mb-1">2017&ndash;2019</p>
-          <h3 class="text-lg font-semibold text-rp-text group-hover:text-rp-rose transition-colors">General Motors</h3>
-          <p class="text-rp-subtle leading-relaxed">
-            Big Data Platform Engineer managing 15PB Hadoop clusters. Built monitoring systems, security frameworks, and automation tools in Go and Python.
-          </p>
-        </a>
-
-        <!-- Lynntech -->
-        <a href="/experience#lynntech" class="block group relative hover:-translate-y-0.5 transition-transform duration-200">
-          <div class="absolute -left-[2.6rem] top-1.5 w-3 h-3 rounded-full bg-rp-rose ring-4 ring-rp-base"></div>
-          <p class="text-sm font-mono text-rp-muted mb-1">2016&ndash;2017</p>
-          <h3 class="text-lg font-semibold text-rp-text group-hover:text-rp-rose transition-colors">Lynntech</h3>
-          <p class="text-rp-subtle leading-relaxed">
-            Research Technician building IoT prototypes with Python, Arduino, and Raspberry Pi. Hardware meets software.
-          </p>
-        </a>
-
-        <!-- Texas A&M -->
+        {/* Texas A&M — hardcoded, not work experience */}
         <div class="relative">
           <div class="absolute -left-[2.6rem] top-1.5 w-3 h-3 rounded-full bg-rp-rose ring-4 ring-rp-base"></div>
           <p class="text-sm font-mono text-rp-muted mb-1">2012&ndash;2017</p>
