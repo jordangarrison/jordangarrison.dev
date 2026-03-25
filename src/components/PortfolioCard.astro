@@ -1,0 +1,73 @@
+---
+import type { PortfolioProject } from '../data/portfolio';
+
+interface Props {
+  project: PortfolioProject;
+}
+
+const { project } = Astro.props;
+---
+
+<div class="bg-rp-surface rounded-xl border border-rp-highlight-med hover:border-rp-rose/50 transition-all duration-300 overflow-hidden">
+  <div class="p-5 border-b border-rp-highlight-low">
+    <h4 class="text-lg font-semibold text-rp-text">{project.title}</h4>
+  </div>
+
+  <div class="p-5 space-y-4">
+    <p class="text-sm text-rp-subtle leading-relaxed">{project.description}</p>
+
+    {project.features.length > 0 && (
+      <div>
+        <p class="text-sm font-medium text-rp-text mb-2">Features</p>
+        <ul class="space-y-1">
+          {project.features.map(feature => (
+            <li class="text-sm text-rp-subtle flex items-start gap-2">
+              <span class="text-rp-rose mt-1">·</span>
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <div>
+      <p class="text-sm font-medium text-rp-text mb-2">Tech Stack</p>
+      <div class="flex flex-wrap gap-2">
+        {project.techStack.map(tech => (
+          <span class="font-mono text-xs px-2.5 py-1 rounded-full bg-rp-highlight-low text-rp-subtle">{tech}</span>
+        ))}
+      </div>
+    </div>
+
+    <div class="flex flex-wrap gap-3 pt-2">
+      <a
+        href={project.githubUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="px-4 py-2 text-sm rounded-lg border border-rp-rose text-rp-rose hover:bg-rp-rose hover:text-rp-base transition-colors"
+      >
+        View Source
+      </a>
+      {project.liveUrl && (
+        <a
+          href={project.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-4 py-2 text-sm rounded-lg bg-rp-pine text-white hover:bg-rp-pine/80 transition-colors"
+        >
+          Live Demo
+        </a>
+      )}
+      {project.downloadUrl && (
+        <a
+          href={project.downloadUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="px-4 py-2 text-sm rounded-lg bg-rp-iris text-white hover:bg-rp-iris/80 transition-colors"
+        >
+          Download
+        </a>
+      )}
+    </div>
+  </div>
+</div>
