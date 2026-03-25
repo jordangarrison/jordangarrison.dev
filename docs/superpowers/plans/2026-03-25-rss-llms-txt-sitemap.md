@@ -97,6 +97,7 @@ export async function GET(context: APIContext) {
 
   return rss({
     title: 'jordangarrison.dev',
+    // Intentionally uses site tagline rather than spec's "Jordan Garrison's blog"
     description:
       'Jordan Garrison — Engineer, lifelong learner, relentlessly curious.',
     site: context.site!.toString(),
@@ -308,7 +309,7 @@ export async function GET(context: APIContext) {
     ''
   );
 
-  // About
+  // About — NOTE: Keep in sync with src/pages/index.astro
   sections.push(
     '## About',
     '',
@@ -417,7 +418,7 @@ export async function GET(context: APIContext) {
 }
 ```
 
-Note: `post.body` returns the raw markdown string from the Astro glob loader. If this is `undefined` at build time, we fall back to empty string. Verify in step 2.
+Note: The Astro 6 glob loader populates `post.body` with raw markdown content (frontmatter stripped). The `?? ''` handles the edge case of an empty post gracefully.
 
 - [ ] **Step 2: Build and verify output**
 
@@ -504,9 +505,9 @@ Expected: No type errors.
 
 - [ ] **Step 7: Commit any remaining changes (if needed)**
 
-If any fixes were made during verification:
+If any fixes were made during verification, stage only the specific files that were changed:
 
 ```bash
-git add -A
+git add <files that were fixed>
 git commit -m "fix: address build verification issues"
 ```
