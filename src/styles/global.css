@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@import "./theme.css";
+@plugin "@tailwindcss/typography";
+
+/* Font imports */
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+@import "@fontsource-variable/source-code-pro";
+
+/* Tailwind v4 theme extension */
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'Source Code Pro Variable', 'Source Code Pro', ui-monospace, monospace;
+
+  --color-rp-base: var(--rp-base);
+  --color-rp-surface: var(--rp-surface);
+  --color-rp-overlay: var(--rp-overlay);
+  --color-rp-muted: var(--rp-muted);
+  --color-rp-subtle: var(--rp-subtle);
+  --color-rp-text: var(--rp-text);
+  --color-rp-love: var(--rp-love);
+  --color-rp-gold: var(--rp-gold);
+  --color-rp-rose: var(--rp-rose);
+  --color-rp-pine: var(--rp-pine);
+  --color-rp-foam: var(--rp-foam);
+  --color-rp-iris: var(--rp-iris);
+  --color-rp-highlight-low: var(--rp-highlight-low);
+  --color-rp-highlight-med: var(--rp-highlight-med);
+  --color-rp-highlight-high: var(--rp-highlight-high);
+}
+
+/* Base styles */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--rp-base);
+    color: var(--rp-text);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  a {
+    color: var(--rp-rose);
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--rp-love);
+  }
+
+  ::selection {
+    background-color: var(--rp-highlight-med);
+    color: var(--rp-text);
+  }
+}

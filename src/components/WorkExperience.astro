@@ -1,0 +1,93 @@
+---
+import type { WE } from '../data/workExperience';
+
+interface Props {
+  workExperience: WE;
+}
+
+const { workExperience } = Astro.props;
+const { meta, body } = workExperience;
+---
+
+<div id={meta.id}>
+  <div class="bg-rp-surface rounded-xl overflow-hidden border border-rp-highlight-med hover:border-rp-rose/50 transition-all duration-300">
+    <!-- Card Header -->
+    <div class="p-6 border-b border-rp-highlight-low">
+      <div class="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+        <!-- Company Logo -->
+        <img
+          src={meta.image}
+          alt={`${meta.company} logo`}
+          width="80"
+          height="80"
+          class="w-20 h-20 rounded-lg bg-white border border-rp-highlight-med object-contain p-2 shrink-0"
+        />
+
+        <!-- Info Section -->
+        <div class="flex-1 text-center sm:text-left">
+          <h3 class="text-xl font-bold text-rp-text">{meta.title}</h3>
+          <a
+            href={meta.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-rp-rose hover:text-rp-love transition-colors font-medium"
+          >
+            {meta.company}
+          </a>
+
+          {meta.promotions && meta.promotions.length > 1 && (
+            <>
+              {/* Desktop: horizontal promotion chain */}
+              <div class="hidden sm:flex flex-wrap items-center gap-1 mt-2">
+                {meta.promotions.map((promo, i) => (
+                  <>
+                    <span class="text-sm text-rp-subtle">
+                      {promo.title}
+                      <span class="text-rp-muted font-mono"> ({promo.date})</span>
+                    </span>
+                    {i < meta.promotions!.length - 1 && (
+                      <span class="text-rp-muted mx-1">&rarr;</span>
+                    )}
+                  </>
+                ))}
+              </div>
+
+              {/* Mobile: vertical promotion chain */}
+              <div class="flex sm:hidden flex-col items-center gap-1 mt-2">
+                {meta.promotions.map((promo, i) => (
+                  <>
+                    <span class="text-sm text-rp-subtle">
+                      {promo.title}
+                      <span class="text-rp-muted font-mono"> ({promo.date})</span>
+                    </span>
+                    {i < meta.promotions!.length - 1 && (
+                      <span class="text-rp-muted">&darr;</span>
+                    )}
+                  </>
+                ))}
+              </div>
+            </>
+          )}
+
+          <div class="mt-3">
+            <span class="bg-rp-highlight-low text-rp-subtle text-sm px-3 py-1 rounded-full font-mono inline-block">
+              {meta.date.start} &ndash; {meta.date.end}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Body -->
+    <div class="p-6">
+      <div class="space-y-4">
+        {body.map((achievement) => (
+          <div class="p-4 rounded-lg bg-rp-base border border-rp-highlight-low hover:border-rp-highlight-med transition-colors">
+            <h4 class="text-base font-semibold text-rp-text mb-2">{achievement.title}</h4>
+            <p class="text-sm text-rp-subtle leading-relaxed">{achievement.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>

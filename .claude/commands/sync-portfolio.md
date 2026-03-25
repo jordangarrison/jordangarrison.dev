@@ -46,7 +46,7 @@ gh api graphql -f query='
 }'
 ```
 
-2. **Read the current portfolio data** from `src/lib/portfolio.data.ts`
+2. **Read the current portfolio data** from `src/data/portfolio.ts`
 
 3. **For each pinned repository** (excluding `jordangarrison.dev`):
 
@@ -78,7 +78,7 @@ gh api graphql -f query='
    - Keep existing IDs for existing projects
    - Assign next available ID for new projects
 
-6. **Update the portfolio data file** (`src/lib/portfolio.data.ts`) with the merged data
+6. **Update the portfolio data file** (`src/data/portfolio.ts`) with the merged data
 
 7. **If `--dry-run`**: Output what changes would be made without writing files
 

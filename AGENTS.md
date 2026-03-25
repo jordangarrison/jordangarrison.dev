@@ -4,178 +4,112 @@ This file provides guidance to AI coding assistants when working with code in th
 
 ## Project Overview
 
-This is a personal portfolio website built with SvelteKit 2 and Svelte 5, showcasing Jordan Garrison's work experience, projects, and contact information. The site uses Sveltestrap for UI components and is deployed to Vercel.
+This is a personal portfolio website built with Astro 6 and Tailwind CSS v4, showcasing Jordan Garrison's work experience, projects, and blog. The site uses Rose Pine theming (Dawn/Dark) and is deployed as a static site.
 
 ## Development Commands
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Start development server
-npm run dev
-
-# Start dev server and open in browser
-npm run dev -- --open
-
-# Type checking
-npm run check
-
-# Type checking in watch mode
-npm run check:watch
-
-# Run tests
-npm run test
-
-# Lint code (Prettier + ESLint)
-npm run lint
-
-# Format code
-npm run format
+bun run dev
 
 # Build for production
-npm run build
+bun run build
 
 # Preview production build
-npm run preview
+bun run preview
+
+# Type checking
+bun run check
 ```
 
 ## Architecture
 
 ### Tech Stack
 
-- **Framework**: SvelteKit 2.49.0 with Svelte 5.46.0
-- **Language**: TypeScript with strict mode enabled
-- **UI Components**: Sveltestrap (Bootstrap-based components)
-- **Deployment**: Vercel (via @sveltejs/adapter-vercel, though adapter-auto is configured)
-- **Testing**: Vitest
-- **Build Tool**: Vite
-
-### Svelte 5 Migration
-
-This project uses Svelte 5 with the Component API v4 compatibility setting. Key Svelte 5 patterns in use:
-
-- `$state()` for reactive state instead of `let` declarations
-- `$props()` for component props with TypeScript types
-- `{@render children?.()}` for slot rendering
-- Modern snippet-based component composition
+- **Framework**: Astro 6
+- **Language**: TypeScript (strict mode)
+- **Styling**: Tailwind CSS v4 with Rose Pine theme (Dawn/Dark)
+- **Typography**: Plus Jakarta Sans (body), Source Code Pro (code)
+- **Blog**: Astro Content Collections with Zod schema validation
+- **Package Manager**: Bun
+- **Nix**: Flake devshell providing bun and tailwindcss
+- **Deployment**: Static output (no adapter), deployable anywhere
 
 ### Project Structure
 
 ```
 src/
-├── lib/
-│   ├── portfolio.model.ts         # TypeScript types for portfolio projects
-│   ├── portfolio.data.ts          # Portfolio project data by category
-│   ├── WorkExperience.model.ts    # TypeScript types for work experience
-│   ├── workExperience.data.ts     # Work experience content data
-│   ├── WorkExperience.svelte      # Work experience component
-│   └── workInProgress.svelte      # Work in progress indicator
-├── routes/
-│   ├── +layout.svelte             # Root layout with navbar and footer
-│   ├── +page.svelte               # Home/About landing page
-│   ├── +page.server.ts            # Home page server logic
-│   ├── experience/                # Work experience page
-│   ├── blog/                      # Blog page
-│   ├── contact/                   # Contact page
-│   └── portfolio/                 # Portfolio page with category filtering
+├── components/          # Reusable Astro components
+│   ├── Navbar.astro
+│   ├── Footer.astro
+│   ├── ThemeToggle.astro
+│   ├── WorkExperience.astro
+│   ├── PortfolioCard.astro
+│   └── BlogCard.astro
+├── content/
+│   └── blog/            # Markdown blog posts (Content Collections)
+├── data/
+│   ├── portfolio.ts     # Portfolio project types & data
+│   └── workExperience.ts # Work experience types & data
+├── layouts/
+│   ├── BaseLayout.astro       # Root layout (html, head, nav, footer)
+│   └── BlogPostLayout.astro   # Blog post wrapper with prose styling
+├── pages/
+│   ├── index.astro            # Home/About page
+│   ├── experience.astro       # Work experience page
+│   ├── portfolio.astro        # Portfolio with category filtering
+│   ├── contact.astro          # Contact page
+│   └── blog/
+│       ├── index.astro        # Blog listing
+│       └── [...slug].astro    # Individual blog post
+├── styles/
+│   ├── global.css             # Tailwind imports, fonts, theme extension
+│   └── theme.css              # Rose Pine CSS custom properties
+└── content.config.ts          # Blog collection schema (Zod)
 ```
 
-### Layout Architecture
+### Theming
 
-The root layout (`src/routes/+layout.svelte`) provides:
-
-- Sveltestrap styles via `<Styles />` component
-- Responsive navbar with mobile toggle (Experience, Portfolio, Blog, Contact, Resume)
-- Main content area with 1024px max-width
-- Footer with social links (GitHub, LinkedIn, Email)
-- Resume download link (from GitHub repository)
+- **Light mode**: Rose Pine Dawn (default)
+- **Dark mode**: Rose Pine
+- Theme is controlled by `class` on `<html>` (`light` or `dark`)
+- CSS custom properties (`--rp-*`) swap per theme
+- Tailwind utilities: `rp-base`, `rp-surface`, `rp-text`, `rp-rose`, `rp-love`, `rp-gold`, `rp-iris`, `rp-foam`, `rp-pine`, `rp-muted`, `rp-subtle`, etc.
+- User preference stored in localStorage, falls back to system `prefers-color-scheme`
 
 ### Data Models
 
-Work experience data follows a structured model (see `WorkExperience.model.ts`):
+Portfolio data (`src/data/portfolio.ts`):
+- `PortfolioProject`: id, title, description, githubUrl, liveUrl, downloadUrl, techStack, features
+- `PortfolioCategory`: 'tools' | 'nix' | 'ai'
+- `PortfolioGroup`: key, title, projects array
+- Projects organized into toolsProjects, nixProjects, aiProjects
 
-- `WE`: Top-level work experience type
-  - `meta`: Contains title, company, image, url, and date range
-  - `body`: Array of project accomplishments with title and description
+Work experience data (`src/data/workExperience.ts`):
+- `WE`: meta + body array
+- `WEMeta`: id, title, company, image, url, date range, optional promotions
+- `WEBody`: title, description
 
-Portfolio data follows a structured model (see `portfolio.model.ts`):
-
-- `PortfolioProject`: Individual project type
-  - `id`: Unique identifier (number)
-  - `title`: Project name
-  - `description`: Project description
-  - `githubUrl`: Link to source code (required)
-  - `liveUrl`: Link to live demo (optional, can be null)
-  - `downloadUrl`: Link to download/release (optional, can be null)
-  - `techStack`: Array of technologies used
-  - `features`: Array of feature descriptions
-- `PortfolioCategory`: Category type (`'tools'` | `'nix'` | `'ai'`)
-- `PortfolioGroup`: Groups projects by category
-  - `key`: Category identifier
-  - `title`: Display name for the category
-  - `projects`: Array of PortfolioProject
-
-Projects are organized in `portfolio.data.ts` by category arrays (`toolsProjects`, `nixProjects`, `aiProjects`) and exported as `projectGroups`.
-
-### Portfolio Filtering
-
-The portfolio page implements category-based filtering using Svelte 5 runes:
-
-- `$state()` tracks the active filter (defaults to `'all'`)
-- `$derived()` computes filtered groups based on the active filter
-- Filter tabs: All, Tools, Nix Ecosystem, AI & Fun
-
-### Styling Approach
-
-- Bootstrap classes via Sveltestrap components
-- Component-scoped styles in `<style>` blocks
-- Responsive design with mobile-first breakpoints
-- Consistent max-width of 1024px for content areas
-- Light color scheme with `#fafafa` backgrounds
-
-## Important Notes
-
-### TypeScript Configuration
-
-- Strict mode is enabled
-- `verbatimModuleSyntax` is set to true (import type syntax required)
-- Path aliases are handled by SvelteKit configuration
-
-### Adapter Configuration
-
-The project uses `adapter-auto` in `svelte.config.js`, which auto-detects the deployment environment. Given the Vercel adapter is installed as a dependency, it will likely use that in production.
-
-### Component API Compatibility
-
-The `svelte.config.js` sets `compatibility.componentApi: 4` to ensure Svelte 5 compatibility. When creating or modifying components, use Svelte 5 runes (`$state`, `$props`, `$derived`, etc.) rather than legacy patterns.
+Blog content (`src/content/blog/`):
+- Markdown with Zod-validated frontmatter: title, date, excerpt, categories, tags, published, readingTime
 
 ## Common Development Patterns
 
-### Adding New Routes
+### Adding New Blog Posts
 
-Create a new directory under `src/routes/` with `+page.svelte`. Use `+page.server.ts` for server-side logic if needed.
+Create a new `.md` file in `src/content/blog/` with frontmatter matching the schema in `src/content.config.ts`.
 
 ### Adding to Portfolio
 
-Edit `src/lib/portfolio.data.ts` and add new project objects to the appropriate category array:
-
-- `toolsProjects`: Developer tools and utilities
-- `nixProjects`: Nix ecosystem packages and configurations
-- `aiProjects`: AI-powered projects and experiments
-
-Each project must implement the `PortfolioProject` interface:
-
-- Required fields: `id`, `title`, `description`, `githubUrl`, `techStack`, `features`
-- Optional fields: `liveUrl`, `downloadUrl` (set to `null` if not applicable)
+Edit `src/data/portfolio.ts` and add new project objects to the appropriate category array.
 
 ### Updating Work Experience
 
-Edit `src/lib/workExperience.data.ts` to add or modify work experience entries. Follow the existing pattern with meta and body structure.
+Edit `src/data/workExperience.ts` to add or modify work experience entries.
 
-### Component Development
+### Adding New Pages
 
-- Use Svelte 5 runes for state management
-- Import Sveltestrap components from `@sveltestrap/sveltestrap`
-- Use TypeScript interfaces for props with the `Props` naming convention
-- Leverage component-scoped styles for styling
+Create a new `.astro` file in `src/pages/`. Use `BaseLayout` for consistent layout.

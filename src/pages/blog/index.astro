@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const publishedPosts = allPosts
+  .filter(post => post.data.published)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const categories = [...new Set(publishedPosts.flatMap(p => p.data.categories))];
+---
+
+<BaseLayout title="Blog — Jordan Garrison">
+  <section class="space-y-8">
+    <div class="text-center space-y-2">
+      <h1 class="text-3xl sm:text-4xl font-bold text-rp-text">Blog</h1>
+      <p class="text-rp-subtle">Thoughts on engineering, Nix, DevOps, and more</p>
+    </div>
+
+    <!-- Category filter tabs -->
+    <div class="flex flex-wrap justify-center gap-2" id="blog-filters">
+      <button
+        data-filter="all"
+        class="filter-tab active px-4 py-1.5 rounded-full text-sm font-medium transition-colors bg-rp-rose text-rp-base"
+      >
+        All
+      </button>
+      {categories.map(category => (
+        <button
+          data-filter={category}
+          class="filter-tab px-4 py-1.5 rounded-full text-sm font-medium transition-colors bg-rp-surface text-rp-subtle hover:text-rp-text border border-rp-highlight-med"
+        >
+          {category.charAt(0).toUpperCase() + category.slice(1)}
+        </button>
+      ))}
+    </div>
+
+    <!-- Blog post grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="blog-grid">
+      {publishedPosts.map(post => (
+        <div class="blog-card-wrapper" data-categories={post.data.categories.join(',')}>
+          <BlogCard post={post} />
+        </div>
+      ))}
+    </div>
+
+    <!-- No posts message -->
+    <p
+      id="no-posts-message"
+      class="hidden text-center text-rp-muted py-12"
+    >
+      No posts found for this category.
+    </p>
+  </section>
+</BaseLayout>
+
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>('#blog-filters .filter-tab');
+  const cards = document.querySelectorAll<HTMLDivElement>('#blog-grid .blog-card-wrapper');
+  const noPostsMessage = document.getElementById('no-posts-message');
+
+  filters.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter!;
+
+      // Update active tab styles
+      filters.forEach(btn => {
+        btn.classList.remove('active', 'bg-rp-rose', 'text-rp-base');
+        btn.classList.add('bg-rp-surface', 'text-rp-subtle', 'border', 'border-rp-highlight-med');
+      });
+      button.classList.add('active', 'bg-rp-rose', 'text-rp-base');
+      button.classList.remove('bg-rp-surface', 'text-rp-subtle', 'border', 'border-rp-highlight-med');
+
+      // Filter cards
+      let visibleCount = 0;
+      cards.forEach(card => {
+        const cardCategories = card.dataset.categories?.split(',') ?? [];
+        if (filter === 'all' || cardCategories.includes(filter)) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Toggle no-posts message
+      if (noPostsMessage) {
+        if (visibleCount === 0) {
+          noPostsMessage.classList.remove('hidden');
+        } else {
+          noPostsMessage.classList.add('hidden');
+        }
+      }
+    });
+  });
+</script>

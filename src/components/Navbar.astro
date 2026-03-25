@@ -1,0 +1,142 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+const currentPath = Astro.url.pathname;
+
+const navLinks = [
+  { label: 'Experience', href: '/experience' },
+  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const resumeHref = 'https://raw.githubusercontent.com/jordangarrison/resume/main/resume.pdf';
+---
+
+<nav class="sticky top-0 z-50 backdrop-blur-md bg-rp-base/80 border-b border-rp-highlight-med">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <!-- Brand -->
+    <a href="/" class="font-mono text-lg font-semibold text-rp-text no-underline hover:text-rp-text">
+      jordangarrison.dev
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-6">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-sm font-medium transition-colors no-underline',
+            currentPath.startsWith(link.href)
+              ? 'text-rp-rose'
+              : 'text-rp-subtle hover:text-rp-text',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href={resumeHref}
+        download="jordan-garrison-resume.pdf"
+        class="text-sm font-medium text-rp-subtle hover:text-rp-text transition-colors no-underline"
+      >
+        Resume
+      </a>
+      <ThemeToggle />
+    </div>
+
+    <!-- Mobile controls -->
+    <div class="flex items-center gap-2 md:hidden">
+      <ThemeToggle />
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        class="p-2 rounded-lg hover:bg-rp-highlight-low transition-colors cursor-pointer"
+        aria-label="Toggle menu"
+      >
+        <!-- Hamburger icon -->
+        <svg
+          id="hamburger-icon"
+          class="w-6 h-6 text-rp-text"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <!-- Close (X) icon -->
+        <svg
+          id="close-icon"
+          class="w-6 h-6 text-rp-text hidden"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-rp-highlight-med">
+    <div class="px-4 py-4 flex flex-col gap-3">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            'text-sm font-medium transition-colors no-underline',
+            currentPath.startsWith(link.href)
+              ? 'text-rp-rose'
+              : 'text-rp-subtle hover:text-rp-text',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href={resumeHref}
+        download="jordan-garrison-resume.pdf"
+        class="text-sm font-medium text-rp-subtle hover:text-rp-text transition-colors no-underline"
+      >
+        Resume
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  function initMobileMenu() {
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    function closeMenu() {
+      mobileMenu?.classList.add('hidden');
+      hamburgerIcon?.classList.remove('hidden');
+      closeIcon?.classList.add('hidden');
+    }
+
+    menuBtn?.addEventListener('click', () => {
+      const isHidden = mobileMenu?.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu?.classList.remove('hidden');
+        hamburgerIcon?.classList.add('hidden');
+        closeIcon?.classList.remove('hidden');
+      } else {
+        closeMenu();
+      }
+    });
+
+    // Close menu on navigation
+    closeMenu();
+  }
+
+  initMobileMenu();
+</script>

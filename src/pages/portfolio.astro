@@ -1,0 +1,76 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PortfolioCard from '../components/PortfolioCard.astro';
+import { projectGroups } from '../data/portfolio';
+---
+
+<BaseLayout title="Portfolio - Jordan Garrison">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mt-8 mb-12">
+      <h1 class="text-4xl font-bold text-rp-text mb-4">My Portfolio</h1>
+      <p class="text-lg text-rp-subtle">A collection of projects I've built and deployed</p>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="flex flex-wrap gap-2 mb-8 justify-center">
+      <button
+        data-filter="all"
+        class="filter-tab bg-rp-rose text-rp-base px-4 py-2 text-sm font-medium rounded-full transition-colors cursor-pointer"
+      >
+        All
+      </button>
+      {projectGroups.map(group => (
+        <button
+          data-filter={group.key}
+          class="filter-tab text-rp-subtle hover:text-rp-text hover:bg-rp-highlight-low px-4 py-2 text-sm font-medium rounded-full transition-colors cursor-pointer"
+        >
+          {group.title}
+        </button>
+      ))}
+    </div>
+
+    <!-- Project Groups -->
+    {projectGroups.map(group => (
+      <div class="project-group mb-10" data-category={group.key}>
+        <h3 class="text-xl font-semibold text-rp-text mb-4 pb-2 border-b border-rp-highlight-med">{group.title}</h3>
+        <div class="grid gap-6">
+          {group.projects.map(project => (
+            <PortfolioCard project={project} />
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</BaseLayout>
+
+<script>
+  function initFilters() {
+    const tabs = document.querySelectorAll('.filter-tab');
+    const groups = document.querySelectorAll('.project-group');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const filter = tab.getAttribute('data-filter');
+
+        // Update active tab styling
+        tabs.forEach(t => {
+          t.classList.remove('bg-rp-rose', 'text-rp-base');
+          t.classList.add('text-rp-subtle', 'hover:text-rp-text', 'hover:bg-rp-highlight-low');
+        });
+        tab.classList.add('bg-rp-rose', 'text-rp-base');
+        tab.classList.remove('text-rp-subtle', 'hover:text-rp-text', 'hover:bg-rp-highlight-low');
+
+        // Show/hide groups
+        groups.forEach(group => {
+          if (filter === 'all' || group.getAttribute('data-category') === filter) {
+            group.classList.remove('hidden');
+          } else {
+            group.classList.add('hidden');
+          }
+        });
+      });
+    });
+  }
+
+  initFilters();
+</script>
