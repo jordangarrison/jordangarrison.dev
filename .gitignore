@@ -23,3 +23,6 @@ pnpm-debug.log*
 
 # direnv
 .direnv
+
+# brainstorming visual companion
+.superpowers/
