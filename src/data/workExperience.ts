@@ -34,7 +34,7 @@ export const workExperiences: WE[] = [
 			id: 'flosports',
 			title: 'Tech Lead, SRE',
 			company: 'FloSports',
-			image: 'https://www.flosports.tv/wp-content/uploads/2020/04/Hawk-ignite.png',
+			image: 'https://flocms.flosports.tv/wp-content/uploads/2026/02/FloSports-Secondary-igniteblack.svg',
 			url: 'https://www.flosports.tv',
 			date: {
 				start: 'November 2019',
