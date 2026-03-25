@@ -139,14 +139,14 @@ const formattedDate = frontmatter.date.toLocaleDateString('en-US', {
       content: none;
     }
 
-    /* Code blocks */
+    /* Code blocks — always dark regardless of theme */
     & pre {
-      background-color: var(--rp-overlay) !important;
+      background-color: #191724 !important;
       border-radius: 0.5rem;
-      border: 1px solid var(--rp-highlight-med);
+      border: 1px solid #26233a;
     }
     & pre code {
-      color: var(--rp-text);
+      color: #e0def4;
       background-color: transparent;
       padding: 0;
       font-size: 0.875em;
