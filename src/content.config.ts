@@ -21,7 +21,7 @@ const experience = defineCollection({
     company: z.string(),
     title: z.string(),
     image: z.string().optional(),
-    url: z.string().url().optional(),
+    url: z.string().optional(),
     startDate: z.string().regex(/^\d{4}-\d{2}$/),
     endDate: z.string().regex(/^\d{4}-\d{2}$/).nullable(),
     sortOrder: z.number(),
