@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./theme.css";
+@plugin "@tailwindcss/typography";
 
 /* Font imports */
 @import "@fontsource/plus-jakarta-sans/400.css";
