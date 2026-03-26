@@ -159,6 +159,21 @@ const formattedDate = frontmatter.date.toLocaleDateString('en-US', {
       font-style: italic;
     }
 
+    /* Pullquotes — magazine-style callout */
+    & aside.pullquote {
+      border-top: 3px solid var(--rp-rose);
+      border-bottom: 3px solid var(--rp-rose);
+      margin: 2rem auto;
+      padding: 1.5rem 2rem;
+      font-size: 1.3rem;
+      line-height: 1.6;
+      font-style: italic;
+      font-weight: 500;
+      color: var(--rp-iris);
+      text-align: center;
+      max-width: 85%;
+    }
+
     /* Horizontal rules */
     & hr {
       border-color: var(--rp-highlight-med);
