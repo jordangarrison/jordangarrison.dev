@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && npx playwright install chromium && bun run generate-pdf",
+    "build": "astro build && npx playwright install --with-deps chromium && bun run generate-pdf",
     "build:site": "astro build",
     "generate-pdf": "node scripts/generate-pdf.js",
     "preview": "astro preview",
