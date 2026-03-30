@@ -1,0 +1,243 @@
+---
+/**
+ * Hidden resume print template page.
+ * Renders a two-column resume layout for Playwright PDF capture.
+ * NOT linked in navigation — exists solely for PDF generation.
+ *
+ * Routes:
+ *   /resume/print/          — condensed version (professional only, brief)
+ *   /resume/print/full/     — full CV with all content
+ *
+ * Also reads ?view=full query param for dev server usage.
+ */
+import { getCollection, render } from 'astro:content';
+import ResumeHeader from '../../../components/resume/ResumeHeader.astro';
+import ResumeSkills from '../../../components/resume/ResumeSkills.astro';
+import ResumeExperience from '../../../components/resume/ResumeExperience.astro';
+import ResumeEducation from '../../../components/resume/ResumeEducation.astro';
+import ResumeAwards from '../../../components/resume/ResumeAwards.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { view: undefined } },
+    { params: { view: 'full' } },
+  ];
+}
+
+// Determine view mode: route param takes precedence, then query param fallback
+const viewParam = Astro.params.view;
+const queryView = Astro.url.searchParams.get('view');
+const isFull = viewParam === 'full' || queryView === 'full';
+
+// Fetch all collections
+const allExperience = (await getCollection('experience'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const allSkills = (await getCollection('skills'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const education = (await getCollection('education'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const awards = (await getCollection('awards'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const certifications = (await getCollection('certifications'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+// Filter experience based on view mode
+const experience = isFull
+  ? allExperience
+  : allExperience.filter((e) => e.data.category === 'professional');
+
+// Filter skills based on view mode
+const sidebarSkills = allSkills.filter((s) => s.data.resumeSection === 'sidebar');
+const mainSkills = allSkills.filter((s) => s.data.resumeSection === 'main');
+
+// Pre-render experience body content for full view
+const renderedBodies = new Map<string, any>();
+if (isFull) {
+  for (const entry of experience) {
+    if (entry.body && entry.body.trim().length > 0) {
+      try {
+        const { Content } = await render(entry);
+        renderedBodies.set(entry.id, Content);
+      } catch {
+        // Skip entries that fail to render
+      }
+    }
+  }
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Jordan Garrison — Resume{isFull ? ' (Full)' : ''}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Reset & base */
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        font-size: 14px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body {
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        color: #2d2d2d;
+        background: #ffffff;
+        line-height: 1.4;
+      }
+
+      /* Page layout */
+      .resume-page {
+        max-width: 8.5in;
+        margin: 0 auto;
+        padding: 0.5in;
+      }
+
+      /* Two-column grid */
+      .resume-grid {
+        display: grid;
+        grid-template-columns: 35% 65%;
+        gap: 1.25rem;
+      }
+
+      /* Sidebar */
+      .resume-sidebar {
+        background: #f5f5f5;
+        padding: 0.75rem;
+        border-radius: 4px;
+      }
+
+      /* Main content */
+      .resume-main {
+        padding: 0 0 0 0.25rem;
+      }
+
+      /* About me section (full view only) */
+      .about-me {
+        margin-bottom: 0.75rem;
+      }
+
+      .about-me .section-heading {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #0E5484;
+        border-bottom: 1.5px solid #0E5484;
+        padding-bottom: 0.15rem;
+        margin: 0 0 0.4rem 0;
+      }
+
+      .about-me p {
+        font-size: 0.65rem;
+        color: #444;
+        line-height: 1.45;
+      }
+
+      /* Print styles */
+      @media print {
+        @page {
+          size: letter;
+          margin: 0.5in;
+        }
+
+        html {
+          font-size: 13px;
+        }
+
+        body {
+          background: #ffffff;
+        }
+
+        .resume-page {
+          padding: 0;
+          max-width: none;
+        }
+
+        .resume-sidebar {
+          background: #f5f5f5 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .experience-entry,
+        .skill-group,
+        .education-entry,
+        .award-entry,
+        .cert-entry {
+          break-inside: avoid;
+        }
+
+        .section-heading {
+          break-after: avoid;
+        }
+      }
+
+      /* Screen preview helpers */
+      @media screen {
+        body {
+          background: #e0e0e0;
+          padding: 1rem 0;
+        }
+
+        .resume-page {
+          background: #ffffff;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          border-radius: 2px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="resume-page">
+      <ResumeHeader />
+
+      <div class="resume-grid">
+        <!-- Left sidebar: skills, education -->
+        <aside class="resume-sidebar">
+          <ResumeSkills skills={isFull ? [...sidebarSkills, ...mainSkills] : sidebarSkills} />
+          <ResumeEducation education={education} />
+        </aside>
+
+        <!-- Right main: experience, awards, certifications -->
+        <div class="resume-main">
+          {isFull && (
+            <div class="about-me">
+              <h2 class="section-heading">About Me</h2>
+              <p>
+                Cloud platform engineer with 9+ years of experience building developer platforms,
+                driving cloud migrations, and establishing SRE practices. Passionate about
+                infrastructure as code, observability, and making developers' lives better.
+                Currently leading SRE at FloSports, a live sports streaming platform.
+              </p>
+            </div>
+          )}
+
+          <ResumeExperience entries={experience} isFull={isFull} renderedBodies={renderedBodies} />
+          <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
