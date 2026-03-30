@@ -76,56 +76,28 @@ async function getChromium() {
   return { chromium, executablePath: undefined };
 }
 
+const PREVIEW_PORT = 14321;
+const PREVIEW_URL = `http://localhost:${PREVIEW_PORT}`;
+
 /**
- * Start the Astro preview server and return its URL + child process.
- * Buffers stdout to handle split chunks when parsing the URL.
+ * Start the Astro preview server and return the child process.
+ * Uses a fixed port and waits for it via HTTP polling instead of parsing stdout.
  */
 function startPreviewServer() {
-  return new Promise((resolvePromise, reject) => {
-    const timeout = setTimeout(() => {
-      reject(new Error('Preview server did not start within 30 seconds'));
-    }, 30_000);
-
-    const child = spawn('npx', ['astro', 'preview'], {
-      cwd: process.cwd(),
-      stdio: ['ignore', 'pipe', 'pipe'],
-      env: { ...process.env },
-    });
-
-    let stderr = '';
-    let stdoutBuffer = '';
-
-    child.stdout.on('data', (data) => {
-      const text = data.toString();
-      process.stdout.write(text);
-      stdoutBuffer += text;
-
-      // Astro prints: "┃ Local    http://localhost:XXXX/"
-      const match = stdoutBuffer.match(/Local\s+(https?:\/\/[^\s]+)/);
-      if (match) {
-        clearTimeout(timeout);
-        const baseUrl = match[1].replace(/\/$/, '');
-        resolvePromise({ baseUrl, child });
-      }
-    });
-
-    child.stderr.on('data', (data) => {
-      stderr += data.toString();
-      process.stderr.write(data);
-    });
-
-    child.on('error', (err) => {
-      clearTimeout(timeout);
-      reject(err);
-    });
-
-    child.on('close', (code) => {
-      clearTimeout(timeout);
-      if (code !== null && code !== 0) {
-        reject(new Error(`Preview server exited with code ${code}: ${stderr}`));
-      }
-    });
+  const child = spawn('npx', ['astro', 'preview', '--port', String(PREVIEW_PORT)], {
+    cwd: process.cwd(),
+    stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env },
   });
+
+  child.stdout.on('data', (data) => process.stdout.write(data));
+  child.stderr.on('data', (data) => process.stderr.write(data));
+
+  child.on('error', (err) => {
+    console.error('Preview server error:', err);
+  });
+
+  return child;
 }
 
 /**
@@ -164,11 +136,12 @@ async function generatePDFs() {
 
   // Start the preview server
   console.log('Starting preview server...');
-  const { baseUrl, child: serverProcess } = await startPreviewServer();
-  console.log(`Preview server running at ${baseUrl}`);
+  const serverProcess = startPreviewServer();
 
   // Wait for the server to be fully ready
-  await waitForServer(baseUrl);
+  console.log(`Waiting for server at ${PREVIEW_URL}...`);
+  await waitForServer(PREVIEW_URL);
+  console.log(`Preview server ready at ${PREVIEW_URL}`);
 
   // Launch headless Chromium
   if (executablePath) {
@@ -192,7 +165,7 @@ async function generatePDFs() {
 
   try {
     for (const { path, output } of PDF_PAGES) {
-      const url = `${baseUrl}${path}`;
+      const url = `${PREVIEW_URL}${path}`;
       const outputPath = resolve(DIST_DIR, output);
 
       console.log(`Generating ${output} from ${url}...`);
