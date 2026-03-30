@@ -45,6 +45,7 @@ const skills = defineCollection({
     sortOrder: z.number(),
     resumeSection: z.enum(['sidebar', 'main']),
     items: z.array(z.string()),
+    note: z.string().optional(),
   }),
 });
 
