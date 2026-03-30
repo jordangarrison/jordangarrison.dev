@@ -10,7 +10,7 @@ const navLinks = [
   { label: 'Contact', href: '/contact' },
 ];
 
-const resumeHref = 'https://raw.githubusercontent.com/jordangarrison/resume/main/resume.pdf';
+const resumeHref = '/resume';
 ---
 
 <nav class="sticky top-0 z-50 backdrop-blur-md bg-rp-base/80 border-b border-rp-highlight-med">
@@ -37,8 +37,12 @@ const resumeHref = 'https://raw.githubusercontent.com/jordangarrison/resume/main
       ))}
       <a
         href={resumeHref}
-        download="jordan-garrison-resume.pdf"
-        class="text-sm font-medium text-rp-subtle hover:text-rp-text transition-colors no-underline"
+        class:list={[
+            'text-sm font-medium transition-colors no-underline',
+            currentPath.startsWith('/resume')
+              ? 'text-rp-rose'
+              : 'text-rp-subtle hover:text-rp-text',
+          ]}
       >
         Resume
       </a>
@@ -101,8 +105,12 @@ const resumeHref = 'https://raw.githubusercontent.com/jordangarrison/resume/main
       ))}
       <a
         href={resumeHref}
-        download="jordan-garrison-resume.pdf"
-        class="text-sm font-medium text-rp-subtle hover:text-rp-text transition-colors no-underline"
+        class:list={[
+            'text-sm font-medium transition-colors no-underline',
+            currentPath.startsWith('/resume')
+              ? 'text-rp-rose'
+              : 'text-rp-subtle hover:text-rp-text',
+          ]}
       >
         Resume
       </a>
