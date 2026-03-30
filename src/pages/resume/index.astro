@@ -30,7 +30,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <a
           id="download-btn"
           href="/resume.pdf"
-          download
+          download="jordan-garrison-resume.pdf"
           class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-rp-surface border border-rp-highlight-med text-rp-subtle hover:text-rp-text hover:border-rp-rose/50 rounded-lg transition-all duration-200 no-underline"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -61,7 +61,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <a
         id="fallback-download-btn"
         href="/resume.pdf"
-        download
+        download="jordan-garrison-resume.pdf"
         class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-rose text-rp-base rounded-lg hover:opacity-90 transition-opacity no-underline"
       >
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -78,10 +78,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           JavaScript is required for the view toggle. You can still download the resume directly.
         </p>
         <div class="flex flex-wrap gap-3 justify-center">
-          <a href="/resume.pdf" download class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-rose text-rp-base rounded-lg no-underline">
+          <a href="/resume.pdf" download="jordan-garrison-resume.pdf" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-rose text-rp-base rounded-lg no-underline">
             Download Condensed PDF
           </a>
-          <a href="/resume-full.pdf" download class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-surface border border-rp-highlight-med text-rp-subtle rounded-lg no-underline">
+          <a href="/resume-full.pdf" download="jordan-garrison-resume-full.pdf" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-surface border border-rp-highlight-med text-rp-subtle rounded-lg no-underline">
             Download Full PDF
           </a>
         </div>
@@ -96,6 +96,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   const PDF_URLS: Record<ViewMode, string> = {
     condensed: '/resume.pdf',
     full: '/resume-full.pdf',
+  };
+
+  const DOWNLOAD_NAMES: Record<ViewMode, string> = {
+    condensed: 'jordan-garrison-resume.pdf',
+    full: 'jordan-garrison-resume-full.pdf',
   };
 
   function getInitialView(): ViewMode {
@@ -119,9 +124,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     viewer.src = url;
 
     // Update download buttons
+    const downloadName = DOWNLOAD_NAMES[view];
     downloadBtn.href = url;
+    downloadBtn.setAttribute('download', downloadName);
     if (fallbackDownloadBtn) {
       fallbackDownloadBtn.href = url;
+      fallbackDownloadBtn.setAttribute('download', downloadName);
     }
 
     // Update toggle button styles
