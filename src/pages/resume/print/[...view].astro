@@ -133,28 +133,6 @@ if (isFull) {
         padding: 0 0 0 0.25rem;
       }
 
-      /* About me section (full view only) */
-      .about-me {
-        margin-bottom: 0.75rem;
-      }
-
-      .about-me .section-heading {
-        font-size: 0.7rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #0E5484;
-        border-bottom: 1.5px solid #0E5484;
-        padding-bottom: 0.15rem;
-        margin: 0 0 0.4rem 0;
-      }
-
-      .about-me p {
-        font-size: 0.65rem;
-        color: #444;
-        line-height: 1.45;
-      }
-
       /* Print styles */
       @media print {
         @page {
@@ -222,18 +200,6 @@ if (isFull) {
 
         <!-- Right main: experience, awards, certifications -->
         <div class="resume-main">
-          {isFull && (
-            <div class="about-me">
-              <h2 class="section-heading">About Me</h2>
-              <p>
-                Cloud platform engineer with 9+ years of experience building developer platforms,
-                driving cloud migrations, and establishing SRE practices. Passionate about
-                infrastructure as code, observability, and making developers' lives better.
-                Currently leading SRE at FloSports, a live sports streaming platform.
-              </p>
-            </div>
-          )}
-
           <ResumeExperience entries={experience} isFull={isFull} renderedBodies={renderedBodies} />
           <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
         </div>
