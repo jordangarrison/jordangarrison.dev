@@ -65,7 +65,7 @@ const certifications = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/certifications' }),
   schema: z.object({
     name: z.string(),
-    date: z.string(),
+    date: z.string().regex(/^\d{4}-\d{2}$/),
     credentialId: z.string().optional(),
     description: z.string().optional(),
     sortOrder: z.number(),
@@ -76,7 +76,7 @@ const awards = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/awards' }),
   schema: z.object({
     title: z.string(),
-    years: z.array(z.number()),
+    years: z.array(z.number()).min(1),
     organization: z.string(),
     sortOrder: z.number(),
   }),

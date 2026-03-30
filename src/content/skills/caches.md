@@ -1,6 +1,6 @@
 ---
 name: "Caches"
-sortOrder: 7
+sortOrder: 8
 resumeSection: "main"
 items:
   - "Redis"

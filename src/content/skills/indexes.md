@@ -1,6 +1,6 @@
 ---
 name: "Indexes"
-sortOrder: 8
+sortOrder: 9
 resumeSection: "main"
 items:
   - "Elasticsearch"

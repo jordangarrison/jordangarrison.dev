@@ -1,6 +1,6 @@
 ---
 name: "Management"
-sortOrder: 9
+sortOrder: 10
 resumeSection: "main"
 items:
   - "Hiring"

@@ -1,6 +1,6 @@
 ---
 name: "Project Management"
-sortOrder: 10
+sortOrder: 11
 resumeSection: "main"
 items:
   - "Agile"

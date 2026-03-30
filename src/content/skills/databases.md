@@ -1,6 +1,6 @@
 ---
 name: "Databases"
-sortOrder: 6
+sortOrder: 7
 resumeSection: "main"
 items:
   - "MySQL"

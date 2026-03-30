@@ -1,6 +1,6 @@
 ---
 name: "CI/CD"
-sortOrder: 5
+sortOrder: 6
 resumeSection: "sidebar"
 items:
   - "GitHub Actions"
