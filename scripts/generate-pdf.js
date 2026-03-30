@@ -12,9 +12,10 @@
  * Generates:
  *   - dist/resume.pdf       (condensed, professional-only)
  *   - dist/resume-full.pdf  (full CV with all content)
+ *
+ * Skips gracefully if Chromium is not available (e.g. on Vercel CI).
  */
 
-import { chromium } from 'playwright';
 import { existsSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 import { spawn } from 'child_process';
@@ -32,7 +33,7 @@ if (!process.env.PLAYWRIGHT_BROWSERS_PATH) {
       console.log(`Auto-detected Nix Playwright browsers: ${browsersPath}`);
     }
   } catch {
-    // Not on NixOS or no access to /nix/store — Playwright will use its default
+    // Not on NixOS or no access to /nix/store
   }
 }
 
@@ -44,8 +45,40 @@ const PDF_PAGES = [
 ];
 
 /**
+ * Check if Playwright + Chromium are available.
+ * Returns the chromium module and optional executablePath, or null if unavailable.
+ */
+async function getChromium() {
+  let chromium;
+  try {
+    const pw = await import('playwright');
+    chromium = pw.chromium;
+  } catch {
+    return null;
+  }
+
+  // On NixOS, find the Nix-managed Chromium executable
+  if (process.env.PLAYWRIGHT_BROWSERS_PATH) {
+    try {
+      const browsersDir = process.env.PLAYWRIGHT_BROWSERS_PATH;
+      const chromiumDirs = readdirSync(browsersDir).filter((d) => d.startsWith('chromium'));
+      if (chromiumDirs.length > 0) {
+        const chromePath = resolve(browsersDir, chromiumDirs[0], 'chrome-linux64', 'chrome');
+        if (existsSync(chromePath)) {
+          return { chromium, executablePath: chromePath };
+        }
+      }
+    } catch {
+      // Fall through to default
+    }
+  }
+
+  return { chromium, executablePath: undefined };
+}
+
+/**
  * Start the Astro preview server and return its URL + child process.
- * Parses the actual listening URL from stdout so we handle port conflicts.
+ * Buffers stdout to handle split chunks when parsing the URL.
  */
 function startPreviewServer() {
   return new Promise((resolvePromise, reject) => {
@@ -60,13 +93,15 @@ function startPreviewServer() {
     });
 
     let stderr = '';
+    let stdoutBuffer = '';
 
     child.stdout.on('data', (data) => {
       const text = data.toString();
       process.stdout.write(text);
+      stdoutBuffer += text;
 
       // Astro prints: "┃ Local    http://localhost:XXXX/"
-      const match = text.match(/Local\s+(https?:\/\/[^\s]+)/);
+      const match = stdoutBuffer.match(/Local\s+(https?:\/\/[^\s]+)/);
       if (match) {
         clearTimeout(timeout);
         const baseUrl = match[1].replace(/\/$/, '');
@@ -117,6 +152,16 @@ async function generatePDFs() {
     process.exit(1);
   }
 
+  // Check if Playwright + Chromium are available
+  const chromiumInfo = await getChromium();
+  if (!chromiumInfo) {
+    console.log('Playwright not available — skipping PDF generation.');
+    console.log('PDFs can be generated locally with: bun run generate-pdf');
+    process.exit(0);
+  }
+
+  const { chromium, executablePath } = chromiumInfo;
+
   // Start the preview server
   console.log('Starting preview server...');
   const { baseUrl, child: serverProcess } = await startPreviewServer();
@@ -126,27 +171,23 @@ async function generatePDFs() {
   await waitForServer(baseUrl);
 
   // Launch headless Chromium
-  // On NixOS, use the Nix-managed Chromium if available
-  const nixChromium = process.env.PLAYWRIGHT_BROWSERS_PATH
-    ? (() => {
-        const browsersDir = process.env.PLAYWRIGHT_BROWSERS_PATH;
-        const chromiumDirs = readdirSync(browsersDir).filter((d) => d.startsWith('chromium'));
-        if (chromiumDirs.length > 0) {
-          const chromePath = resolve(browsersDir, chromiumDirs[0], 'chrome-linux64', 'chrome');
-          if (existsSync(chromePath)) return chromePath;
-        }
-        return undefined;
-      })()
-    : undefined;
-
-  if (nixChromium) {
-    console.log(`Using Nix Chromium: ${nixChromium}`);
+  if (executablePath) {
+    console.log(`Using Nix Chromium: ${executablePath}`);
   }
 
-  const browser = await chromium.launch({
-    headless: true,
-    ...(nixChromium ? { executablePath: nixChromium } : {}),
-  });
+  let browser;
+  try {
+    browser = await chromium.launch({
+      headless: true,
+      ...(executablePath ? { executablePath } : {}),
+    });
+  } catch (err) {
+    console.log(`Chromium launch failed — skipping PDF generation: ${err.message}`);
+    console.log('PDFs can be generated locally with: bun run generate-pdf');
+    serverProcess.kill('SIGTERM');
+    process.exit(0);
+  }
+
   const context = await browser.newContext();
 
   try {
