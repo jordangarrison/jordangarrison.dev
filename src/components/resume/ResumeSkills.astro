@@ -1,7 +1,7 @@
 ---
 /**
- * Renders skill categories as compact comma-separated lists.
- * For print resume — no pills, just space-efficient text.
+ * Renders skill categories as tag pills.
+ * For print resume sidebar — compact pill layout.
  */
 interface SkillCategory {
   data: {
@@ -19,16 +19,36 @@ interface Props {
 
 const { skills } = Astro.props;
 const sorted = [...skills].sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+// Separate specialized skills to feature them
+const specialized = sorted.filter((s) => s.data.name === 'Specialized Skills');
+const rest = sorted.filter((s) => s.data.name !== 'Specialized Skills');
 ---
 
 <section class="resume-skills">
   <h2 class="section-heading">Skills</h2>
-  {sorted.map((skill) => (
+
+  {specialized.map((skill) => (
+    <div class="skill-featured">
+      <div class="pill-category">{skill.data.name}</div>
+      <div class="pill-wrap">
+        {skill.data.items.map((item) => (
+          <span class="pill pill-accent">{item}</span>
+        ))}
+      </div>
+    </div>
+  ))}
+
+  {rest.map((skill) => (
     <div class="skill-group">
-      <span class="skill-name">{skill.data.name}:</span>
-      <span class="skill-items">{skill.data.items.join(', ')}</span>
+      <div class="pill-category">{skill.data.name}</div>
+      <div class="pill-wrap">
+        {skill.data.items.map((item) => (
+          <span class="pill">{item}</span>
+        ))}
+      </div>
       {skill.data.note && (
-        <span class="skill-note"> — {skill.data.note}</span>
+        <div class="skill-note">{skill.data.note}</div>
       )}
     </div>
   ))}
@@ -50,25 +70,49 @@ const sorted = [...skills].sort((a, b) => a.data.sortOrder - b.data.sortOrder);
     margin: 0 0 0.4rem 0;
   }
 
+  .skill-featured {
+    background: #e0ecf5;
+    padding: 0.2rem 0.3rem;
+    border-radius: 3px;
+    margin-bottom: 0.3rem;
+  }
+
   .skill-group {
     margin-bottom: 0.25rem;
-    font-size: 0.65rem;
-    line-height: 1.35;
     break-inside: avoid;
   }
 
-  .skill-name {
+  .pill-category {
+    font-size: 0.55rem;
     font-weight: 600;
-    color: #2d2d2d;
+    color: #0E5484;
+    margin-bottom: 0.1rem;
   }
 
-  .skill-items {
-    color: #444;
+  .pill-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.12rem;
+  }
+
+  .pill {
+    font-size: 0.5rem;
+    background: #e0e0e0;
+    color: #333;
+    padding: 0.05rem 0.25rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .pill-accent {
+    background: #fff;
+    color: #0E5484;
   }
 
   .skill-note {
     color: #666;
     font-style: italic;
-    font-size: 0.65rem;
+    font-size: 0.5rem;
+    margin-top: 0.1rem;
   }
 </style>

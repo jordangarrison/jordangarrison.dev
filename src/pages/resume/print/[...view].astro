@@ -213,21 +213,41 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
         font-size: 0.65rem;
       }
 
-      /* Skills */
-      .resume-page :global(.skill-group) {
-        font-size: 0.7rem;
+      /* Skills — sidebar pill overrides */
+      .resume-page :global(.pill-category) {
+        font-size: 0.55rem;
       }
 
-      .resume-page :global(.skill-name) {
-        font-size: 0.7rem;
+      .resume-page :global(.pill-wrap) {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.12rem;
       }
 
-      .resume-page :global(.skill-items) {
-        font-size: 0.7rem;
+      .resume-page :global(.pill) {
+        font-size: 0.45rem;
+        background: #e0e0e0;
+        color: #333;
+        padding: 0.05rem 0.2rem;
+        border-radius: 2px;
+        white-space: nowrap;
+        display: inline-block;
+      }
+
+      .resume-page :global(.pill-accent) {
+        background: #fff;
+        color: #0E5484;
+      }
+
+      .resume-page :global(.skill-featured) {
+        background: #e0ecf5;
+        padding: 0.15rem 0.25rem;
+        border-radius: 3px;
+        margin-bottom: 0.2rem;
       }
 
       .resume-page :global(.skill-note) {
-        font-size: 0.65rem;
+        font-size: 0.45rem;
       }
 
       /* Education */
@@ -286,34 +306,70 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
         color: #0E5484;
         border-bottom: 1.5px solid #0E5484;
         padding-bottom: 0.1rem;
-        margin: 0 0 0.25rem 0;
+        margin: 0 0 0.3rem 0;
       }
 
+      /* Specialized skills - full width with accent */
+      .skills-featured {
+        background: #e0ecf5;
+        padding: 0.25rem 0.4rem;
+        border-radius: 3px;
+        margin-bottom: 0.3rem;
+      }
+
+      .skills-featured .pill-category {
+        font-size: 0.6rem;
+        font-weight: 600;
+        color: #0E5484;
+        margin-bottom: 0.15rem;
+      }
+
+      .skills-featured .pill-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.15rem;
+      }
+
+      .skills-featured .pill {
+        font-size: 0.55rem;
+        background: #fff;
+        color: #0E5484;
+        padding: 0.05rem 0.35rem;
+        border-radius: 2px;
+        white-space: nowrap;
+      }
+
+      /* Regular skills grid */
       .skills-grid {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
-        gap: 0rem 1rem;
+        gap: 0.25rem 0.75rem;
       }
 
-      .skills-grid .flow-skill {
-        font-size: 0.6rem;
-        line-height: 1.3;
+      .pill-group {
+        margin-bottom: 0;
+      }
+
+      .pill-category {
+        font-size: 0.55rem;
+        font-weight: 600;
+        color: #0E5484;
         margin-bottom: 0.1rem;
       }
 
-      .skills-grid .flow-skill-name {
-        font-weight: 600;
-        color: #2d2d2d;
+      .pill-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.12rem;
       }
 
-      .skills-grid .flow-skill-items {
-        color: #444;
-      }
-
-      .skills-grid .flow-skill-note {
-        color: #666;
-        font-style: italic;
-        font-size: 0.55rem;
+      .pill {
+        font-size: 0.5rem;
+        background: #e8e8e8;
+        color: #333;
+        padding: 0.05rem 0.3rem;
+        border-radius: 2px;
+        white-space: nowrap;
       }
 
       .education-bar {
@@ -357,6 +413,35 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
         .resume-sidebar,
         .skills-bar {
           background: #f5f5f5 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .skills-featured {
+          background: #e0ecf5 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .skills-featured .pill {
+          background: #fff !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .pill,
+        .resume-page :global(.pill) {
+          background: #e8e8e8 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .resume-page :global(.pill-accent) {
+          background: #fff !important;
+        }
+
+        .resume-page :global(.skill-featured) {
+          background: #e0ecf5 !important;
           -webkit-print-color-adjust: exact;
           print-color-adjust: exact;
         }
@@ -418,15 +503,32 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
           <ResumeHeader />
         </div>
 
-        <!-- All skills in a compact grid bar -->
+        <!-- Skills as tag pills -->
         <div class="skills-bar">
           <h2 class="skills-heading">Skills</h2>
+
+          {/* Specialized skills featured at top */}
+          {allSkills.filter(s => s.data.name === 'Specialized Skills').map((skill) => (
+            <div class="skills-featured">
+              <div class="pill-category">{skill.data.name}</div>
+              <div class="pill-wrap">
+                {skill.data.items.map((item) => (
+                  <span class="pill">{item}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* Rest in 3-column grid */}
           <div class="skills-grid">
-            {allSkills.map((skill) => (
-              <div class="flow-skill">
-                <span class="flow-skill-name">{skill.data.name}:</span>{' '}
-                <span class="flow-skill-items">{skill.data.items.join(', ')}</span>
-                {skill.data.note && <span class="flow-skill-note"> — {skill.data.note}</span>}
+            {allSkills.filter(s => s.data.name !== 'Specialized Skills').map((skill) => (
+              <div class="pill-group">
+                <div class="pill-category">{skill.data.name}</div>
+                <div class="pill-wrap">
+                  {skill.data.items.map((item) => (
+                    <span class="pill">{item}</span>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -437,11 +539,11 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
           <ResumeEducation education={education} />
         </div>
 
+        <!-- Awards & Certifications first (eye-catching) -->
+        <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+
         <!-- All experience flows naturally -->
         <ResumeExperience entries={experience} isFull={isFull} renderedBodies={renderedBodies} />
-
-        <!-- Awards & Certifications -->
-        <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
       </div>
     ) : (
       <!-- ==================== CONDENSED: FIXED TWO-PAGE LAYOUT ==================== -->
