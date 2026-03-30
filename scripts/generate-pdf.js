@@ -15,9 +15,26 @@
  */
 
 import { chromium } from 'playwright';
-import { existsSync } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 import { resolve } from 'path';
 import { spawn } from 'child_process';
+
+// Auto-detect Nix-managed Playwright browsers if PLAYWRIGHT_BROWSERS_PATH is not set
+if (!process.env.PLAYWRIGHT_BROWSERS_PATH) {
+  const nixStore = '/nix/store';
+  try {
+    const entries = readdirSync(nixStore).filter(
+      (e) => e.includes('playwright-browsers') && !e.endsWith('.drv')
+    );
+    if (entries.length > 0) {
+      const browsersPath = resolve(nixStore, entries[entries.length - 1]);
+      process.env.PLAYWRIGHT_BROWSERS_PATH = browsersPath;
+      console.log(`Auto-detected Nix Playwright browsers: ${browsersPath}`);
+    }
+  } catch {
+    // Not on NixOS or no access to /nix/store — Playwright will use its default
+  }
+}
 
 const DIST_DIR = resolve(process.cwd(), 'dist');
 
@@ -109,7 +126,27 @@ async function generatePDFs() {
   await waitForServer(baseUrl);
 
   // Launch headless Chromium
-  const browser = await chromium.launch({ headless: true });
+  // On NixOS, use the Nix-managed Chromium if available
+  const nixChromium = process.env.PLAYWRIGHT_BROWSERS_PATH
+    ? (() => {
+        const browsersDir = process.env.PLAYWRIGHT_BROWSERS_PATH;
+        const chromiumDirs = readdirSync(browsersDir).filter((d) => d.startsWith('chromium'));
+        if (chromiumDirs.length > 0) {
+          const chromePath = resolve(browsersDir, chromiumDirs[0], 'chrome-linux64', 'chrome');
+          if (existsSync(chromePath)) return chromePath;
+        }
+        return undefined;
+      })()
+    : undefined;
+
+  if (nixChromium) {
+    console.log(`Using Nix Chromium: ${nixChromium}`);
+  }
+
+  const browser = await chromium.launch({
+    headless: true,
+    ...(nixChromium ? { executablePath: nixChromium } : {}),
+  });
   const context = await browser.newContext();
 
   try {
