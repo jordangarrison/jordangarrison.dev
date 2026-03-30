@@ -16,7 +16,7 @@
  * Skips gracefully if Chromium is not available (e.g. on Vercel CI).
  */
 
-import { existsSync, readdirSync } from 'fs';
+import { existsSync, readdirSync, copyFileSync, mkdirSync } from 'fs';
 import { resolve } from 'path';
 import { spawn } from 'child_process';
 
@@ -190,6 +190,16 @@ async function generatePDFs() {
 
       console.log(`  -> ${outputPath}`);
       await page.close();
+    }
+
+    // Copy PDFs to public/ so they're committed and available on Vercel
+    const publicDir = resolve(process.cwd(), 'public');
+    mkdirSync(publicDir, { recursive: true });
+    for (const { output } of PDF_PAGES) {
+      const src = resolve(DIST_DIR, output);
+      const dest = resolve(publicDir, output);
+      copyFileSync(src, dest);
+      console.log(`  -> copied to public/${output}`);
     }
 
     console.log('PDF generation complete.');
