@@ -13,11 +13,15 @@
           buildInputs = with pkgs; [
             bun
             tailwindcss
+            playwright-driver.browsers
           ];
+
+          PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright-driver.browsers}";
 
           shellHook = ''
             echo "jordangarrison.dev dev shell loaded"
             echo "  bun: $(bun --version)"
+            echo "  playwright browsers: $PLAYWRIGHT_BROWSERS_PATH"
           '';
         };
       }

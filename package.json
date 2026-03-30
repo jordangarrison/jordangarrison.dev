@@ -7,7 +7,9 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && bun run generate-pdf",
+    "build:site": "astro build",
+    "generate-pdf": "node scripts/generate-pdf.js",
     "preview": "astro preview",
     "astro": "astro",
     "check": "astro check"
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.8",
+    "playwright": "^1.58.2",
     "typescript": "^6.0.2"
   }
 }
