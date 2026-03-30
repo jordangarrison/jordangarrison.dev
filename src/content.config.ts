@@ -38,4 +38,48 @@ const experience = defineCollection({
   }),
 });
 
-export const collections = { blog, experience };
+const skills = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/skills' }),
+  schema: z.object({
+    name: z.string(),
+    sortOrder: z.number(),
+    resumeSection: z.enum(['sidebar', 'main']),
+    items: z.array(z.string()),
+  }),
+});
+
+const education = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/education' }),
+  schema: z.object({
+    institution: z.string(),
+    degree: z.string(),
+    major: z.string(),
+    minor: z.string().optional(),
+    startYear: z.number(),
+    endYear: z.number(),
+    sortOrder: z.number(),
+  }),
+});
+
+const certifications = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/certifications' }),
+  schema: z.object({
+    name: z.string(),
+    date: z.string(),
+    credentialId: z.string().optional(),
+    description: z.string().optional(),
+    sortOrder: z.number(),
+  }),
+});
+
+const awards = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/awards' }),
+  schema: z.object({
+    title: z.string(),
+    years: z.array(z.number()),
+    organization: z.string(),
+    sortOrder: z.number(),
+  }),
+});
+
+export const collections = { blog, experience, skills, education, certifications, awards };
