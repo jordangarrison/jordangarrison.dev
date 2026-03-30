@@ -1,0 +1,178 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Resume - Jordan Garrison">
+  <div class="max-w-4xl mx-auto">
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-8 mb-6 gap-4">
+      <h1 class="text-4xl font-bold text-rp-text">Resume</h1>
+      <div class="flex flex-wrap gap-3">
+        <!-- Condensed/Full Toggle -->
+        <div class="flex rounded-lg border border-rp-highlight-med overflow-hidden">
+          <button
+            id="btn-condensed"
+            data-view="condensed"
+            class="view-btn px-4 py-2 text-sm font-medium transition-colors bg-rp-rose text-rp-base cursor-pointer"
+          >
+            Condensed
+          </button>
+          <button
+            id="btn-full"
+            data-view="full"
+            class="view-btn px-4 py-2 text-sm font-medium transition-colors text-rp-subtle hover:text-rp-text hover:bg-rp-highlight-low cursor-pointer"
+          >
+            Full
+          </button>
+        </div>
+
+        <!-- Download Button -->
+        <a
+          id="download-btn"
+          href="/resume.pdf"
+          download
+          class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-rp-surface border border-rp-highlight-med text-rp-subtle hover:text-rp-text hover:border-rp-rose/50 rounded-lg transition-all duration-200 no-underline"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Download PDF
+        </a>
+      </div>
+    </div>
+
+    <!-- PDF Embed -->
+    <div class="rounded-xl overflow-hidden border border-rp-highlight-med shadow-sm" style="height: 80vh;">
+      <embed
+        id="pdf-viewer"
+        src="/resume.pdf"
+        type="application/pdf"
+        width="100%"
+        height="100%"
+        class="block"
+      />
+    </div>
+
+    <!-- Mobile / no-PDF fallback -->
+    <div id="pdf-fallback" class="hidden mt-4 p-6 bg-rp-surface rounded-xl border border-rp-highlight-med text-center">
+      <p class="text-rp-subtle mb-4">
+        Your browser doesn't support inline PDF viewing.
+      </p>
+      <a
+        id="fallback-download-btn"
+        href="/resume.pdf"
+        download
+        class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-rose text-rp-base rounded-lg hover:opacity-90 transition-opacity no-underline"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
+        Download Resume PDF
+      </a>
+    </div>
+
+    <!-- Noscript fallback -->
+    <noscript>
+      <div class="mt-4 p-6 bg-rp-surface rounded-xl border border-rp-highlight-med text-center">
+        <p class="text-rp-subtle mb-4">
+          JavaScript is required for the view toggle. You can still download the resume directly.
+        </p>
+        <div class="flex flex-wrap gap-3 justify-center">
+          <a href="/resume.pdf" download class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-rose text-rp-base rounded-lg no-underline">
+            Download Condensed PDF
+          </a>
+          <a href="/resume-full.pdf" download class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-surface border border-rp-highlight-med text-rp-subtle rounded-lg no-underline">
+            Download Full PDF
+          </a>
+        </div>
+      </div>
+    </noscript>
+  </div>
+</BaseLayout>
+
+<script>
+  type ViewMode = 'condensed' | 'full';
+
+  const PDF_URLS: Record<ViewMode, string> = {
+    condensed: '/resume.pdf',
+    full: '/resume-full.pdf',
+  };
+
+  function getInitialView(): ViewMode {
+    const params = new URLSearchParams(window.location.search);
+    const view = params.get('view');
+    return view === 'full' ? 'full' : 'condensed';
+  }
+
+  function setView(view: ViewMode) {
+    const viewer = document.getElementById('pdf-viewer') as HTMLEmbedElement | null;
+    const downloadBtn = document.getElementById('download-btn') as HTMLAnchorElement | null;
+    const fallbackDownloadBtn = document.getElementById('fallback-download-btn') as HTMLAnchorElement | null;
+    const btnCondensed = document.getElementById('btn-condensed');
+    const btnFull = document.getElementById('btn-full');
+
+    if (!viewer || !downloadBtn || !btnCondensed || !btnFull) return;
+
+    const url = PDF_URLS[view];
+
+    // Update embed src
+    viewer.src = url;
+
+    // Update download buttons
+    downloadBtn.href = url;
+    if (fallbackDownloadBtn) {
+      fallbackDownloadBtn.href = url;
+    }
+
+    // Update toggle button styles
+    const activeClasses = ['bg-rp-rose', 'text-rp-base'];
+    const inactiveClasses = ['text-rp-subtle', 'hover:text-rp-text', 'hover:bg-rp-highlight-low'];
+
+    if (view === 'condensed') {
+      btnCondensed.classList.add(...activeClasses);
+      btnCondensed.classList.remove(...inactiveClasses);
+      btnFull.classList.remove(...activeClasses);
+      btnFull.classList.add(...inactiveClasses);
+    } else {
+      btnFull.classList.add(...activeClasses);
+      btnFull.classList.remove(...inactiveClasses);
+      btnCondensed.classList.remove(...activeClasses);
+      btnCondensed.classList.add(...inactiveClasses);
+    }
+
+    // Update URL param without reload
+    const url_ = new URL(window.location.href);
+    if (view === 'full') {
+      url_.searchParams.set('view', 'full');
+    } else {
+      url_.searchParams.delete('view');
+    }
+    window.history.replaceState({}, '', url_.toString());
+  }
+
+  function checkPdfSupport() {
+    // Detect mobile browsers or browsers that likely can't render PDFs inline
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+      const viewer = document.getElementById('pdf-viewer');
+      const fallback = document.getElementById('pdf-fallback');
+      if (viewer) viewer.classList.add('hidden');
+      if (fallback) fallback.classList.remove('hidden');
+    }
+  }
+
+  // Initialize
+  const initialView = getInitialView();
+  setView(initialView);
+  checkPdfSupport();
+
+  // Wire up toggle buttons
+  document.querySelectorAll<HTMLButtonElement>('.view-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const view = btn.getAttribute('data-view') as ViewMode;
+      if (view === 'condensed' || view === 'full') {
+        setView(view);
+      }
+    });
+  });
+</script>
