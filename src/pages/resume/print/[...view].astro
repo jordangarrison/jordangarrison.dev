@@ -73,15 +73,10 @@ if (isFull) {
   }
 }
 
-// Split experience for page distribution
-// Page 1 main: first few professional entries that fit
-// Page 2 main: remaining experience + awards/certs
-// For condensed: professional only (4 entries typically)
-// For full: all entries
+// For condensed: split experience across fixed pages
+// For full: all content flows naturally
 const page1Experience = experience.slice(0, 2);
 const page2Experience = experience.slice(2);
-
-// Determine if we need a second page
 const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certifications.length > 0;
 ---
 
@@ -266,6 +261,35 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
         font-size: 0.7rem;
       }
 
+      /* ===== Full view: flowing layout ===== */
+      .resume-flow {
+        max-width: 7.5in;
+        margin: 0 auto;
+      }
+
+      .resume-flow .resume-header-wrapper {
+        margin-bottom: 0.6rem;
+      }
+
+      .skills-bar {
+        background: #f5f5f5;
+        padding: 0.6rem 0.55rem;
+        border-radius: 4px;
+        margin-bottom: 0.6rem;
+      }
+
+      .skills-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.1rem 1.5rem;
+      }
+
+      .education-bar {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 0.6rem;
+      }
+
       /* ===== Print styles ===== */
       @media print {
         @page {
@@ -287,10 +311,15 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
           page-break-after: auto;
         }
 
-        .resume-sidebar {
+        .resume-sidebar,
+        .skills-bar {
           background: #f5f5f5 !important;
           -webkit-print-color-adjust: exact;
           print-color-adjust: exact;
+        }
+
+        .resume-flow {
+          max-width: none;
         }
 
         .experience-entry,
@@ -326,52 +355,93 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
         .page-content {
           padding: 0.5in;
         }
+
+        .resume-flow {
+          background: #ffffff;
+          box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.12),
+            0 4px 12px rgba(0, 0, 0, 0.08);
+          border-radius: 2px;
+          padding: 0.5in;
+        }
       }
     </style>
   </head>
   <body>
-    <!-- ==================== PAGE 1 ==================== -->
-    <div class="resume-page">
-      <div class="page-content">
-        <!-- Full-width header -->
+    {isFull ? (
+      <!-- ==================== FULL VIEW: FLOWING LAYOUT ==================== -->
+      <div class="resume-flow">
         <div class="resume-header-wrapper">
           <ResumeHeader />
         </div>
 
-        <!-- Two-column grid: sidebar skills + education | experience -->
-        <div class="resume-grid resume-grid-fill">
-          <aside class="resume-sidebar">
-            <ResumeSkills skills={sidebarSkills} />
-            <ResumeEducation education={education} />
-          </aside>
-
-          <div class="resume-main">
-            <ResumeExperience entries={page1Experience} isFull={isFull} renderedBodies={renderedBodies} />
+        <!-- All skills in a compact grid bar -->
+        <div class="skills-bar">
+          <div class="skills-grid">
+            {allSkills.map((skill) => (
+              <div class="skill-group">
+                <span class="skill-name">{skill.data.name}:</span>
+                <span class="skill-items">{skill.data.items.join(', ')}</span>
+                {skill.data.note && <span class="skill-note"> — {skill.data.note}</span>}
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- ==================== PAGE 2+ ==================== -->
-    {hasPage2Content && (
+        <!-- Education inline -->
+        <div class="education-bar">
+          <ResumeEducation education={education} />
+        </div>
+
+        <!-- All experience flows naturally -->
+        <ResumeExperience entries={experience} isFull={isFull} renderedBodies={renderedBodies} />
+
+        <!-- Awards & Certifications -->
+        <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+      </div>
+    ) : (
+      <!-- ==================== CONDENSED: FIXED TWO-PAGE LAYOUT ==================== -->
+      <!-- PAGE 1 -->
       <div class="resume-page">
         <div class="page-content">
+          <div class="resume-header-wrapper">
+            <ResumeHeader />
+          </div>
+
           <div class="resume-grid resume-grid-fill">
             <aside class="resume-sidebar">
-              {mainSkills.length > 0 && (
-                <ResumeSkills skills={mainSkills} />
-              )}
+              <ResumeSkills skills={sidebarSkills} />
+              <ResumeEducation education={education} />
             </aside>
 
             <div class="resume-main">
-              {page2Experience.length > 0 && (
-                <ResumeExperience entries={page2Experience} isFull={isFull} renderedBodies={renderedBodies} />
-              )}
-              <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+              <ResumeExperience entries={page1Experience} isFull={isFull} renderedBodies={renderedBodies} />
             </div>
           </div>
         </div>
       </div>
+
+      <!-- PAGE 2 -->
+      {hasPage2Content && (
+        <div class="resume-page">
+          <div class="page-content">
+            <div class="resume-grid resume-grid-fill">
+              <aside class="resume-sidebar">
+                {mainSkills.length > 0 && (
+                  <ResumeSkills skills={mainSkills} />
+                )}
+              </aside>
+
+              <div class="resume-main">
+                {page2Experience.length > 0 && (
+                  <ResumeExperience entries={page2Experience} isFull={isFull} renderedBodies={renderedBodies} />
+                )}
+                <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     )}
   </body>
 </html>
