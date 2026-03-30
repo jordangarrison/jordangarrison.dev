@@ -273,21 +273,64 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
 
       .skills-bar {
         background: #f5f5f5;
-        padding: 0.6rem 0.55rem;
+        padding: 0.4rem 0.5rem;
         border-radius: 4px;
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .skills-bar .skills-heading {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #0E5484;
+        border-bottom: 1.5px solid #0E5484;
+        padding-bottom: 0.1rem;
+        margin: 0 0 0.25rem 0;
       }
 
       .skills-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 0.1rem 1.5rem;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0rem 1rem;
+      }
+
+      .skills-grid .flow-skill {
+        font-size: 0.6rem;
+        line-height: 1.3;
+        margin-bottom: 0.1rem;
+      }
+
+      .skills-grid .flow-skill-name {
+        font-weight: 600;
+        color: #2d2d2d;
+      }
+
+      .skills-grid .flow-skill-items {
+        color: #444;
+      }
+
+      .skills-grid .flow-skill-note {
+        color: #666;
+        font-style: italic;
+        font-size: 0.55rem;
       }
 
       .education-bar {
-        display: flex;
-        gap: 1.5rem;
-        margin-bottom: 0.6rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .education-bar :global(.resume-education) {
+        margin-bottom: 0;
+      }
+
+      .education-bar :global(.edu-institution) {
+        font-size: 0.65rem;
+      }
+
+      .education-bar :global(.edu-degree),
+      .education-bar :global(.edu-years) {
+        font-size: 0.6rem;
       }
 
       /* ===== Print styles ===== */
@@ -377,12 +420,13 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
 
         <!-- All skills in a compact grid bar -->
         <div class="skills-bar">
+          <h2 class="skills-heading">Skills</h2>
           <div class="skills-grid">
             {allSkills.map((skill) => (
-              <div class="skill-group">
-                <span class="skill-name">{skill.data.name}:</span>
-                <span class="skill-items">{skill.data.items.join(', ')}</span>
-                {skill.data.note && <span class="skill-note"> — {skill.data.note}</span>}
+              <div class="flow-skill">
+                <span class="flow-skill-name">{skill.data.name}:</span>{' '}
+                <span class="flow-skill-items">{skill.data.items.join(', ')}</span>
+                {skill.data.note && <span class="flow-skill-note"> — {skill.data.note}</span>}
               </div>
             ))}
           </div>
