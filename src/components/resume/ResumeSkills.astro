@@ -27,6 +27,9 @@ const sorted = [...skills].sort((a, b) => a.data.sortOrder - b.data.sortOrder);
     <div class="skill-group">
       <span class="skill-name">{skill.data.name}:</span>
       <span class="skill-items">{skill.data.items.join(', ')}</span>
+      {skill.data.note && (
+        <span class="skill-note"> — {skill.data.note}</span>
+      )}
     </div>
   ))}
 </section>
@@ -61,5 +64,11 @@ const sorted = [...skills].sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 
   .skill-items {
     color: #444;
+  }
+
+  .skill-note {
+    color: #666;
+    font-style: italic;
+    font-size: 0.65rem;
   }
 </style>

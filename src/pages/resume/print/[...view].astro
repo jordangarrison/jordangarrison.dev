@@ -1,7 +1,7 @@
 ---
 /**
  * Hidden resume print template page.
- * Renders a two-column resume layout for Playwright PDF capture.
+ * Renders a LaTeX-style per-page two-column resume layout for Playwright PDF capture.
  * NOT linked in navigation — exists solely for PDF generation.
  *
  * Routes:
@@ -9,6 +9,10 @@
  *   /resume/print/full/     — full CV with all content
  *
  * Also reads ?view=full query param for dev server usage.
+ *
+ * Layout:
+ *   Page 1: Full-width header + two-column grid (sidebar skills + education | experience)
+ *   Page 2+: Two-column grid continues (overflow sidebar skills | remaining experience + awards)
  */
 import { getCollection, render } from 'astro:content';
 import ResumeHeader from '../../../components/resume/ResumeHeader.astro';
@@ -50,7 +54,7 @@ const experience = isFull
   ? allExperience
   : allExperience.filter((e) => e.data.category === 'professional');
 
-// Filter skills based on view mode
+// Split skills by resume section
 const sidebarSkills = allSkills.filter((s) => s.data.resumeSection === 'sidebar');
 const mainSkills = allSkills.filter((s) => s.data.resumeSection === 'main');
 
@@ -68,6 +72,17 @@ if (isFull) {
     }
   }
 }
+
+// Split experience for page distribution
+// Page 1 main: first few professional entries that fit
+// Page 2 main: remaining experience + awards/certs
+// For condensed: professional only (4 entries typically)
+// For full: all entries
+const page1Experience = experience.slice(0, 2);
+const page2Experience = experience.slice(2);
+
+// Determine if we need a second page
+const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certifications.length > 0;
 ---
 
 <!doctype html>
@@ -95,7 +110,6 @@ if (isFull) {
       }
 
       html {
-        font-size: 14px;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
       }
@@ -107,41 +121,156 @@ if (isFull) {
         line-height: 1.4;
       }
 
-      /* Page layout */
+      /* ===== Page containers — sized to letter paper ===== */
       .resume-page {
-        max-width: 8.5in;
+        width: 7.5in;
+        min-height: 10in;
+        padding: 0;
         margin: 0 auto;
-        padding: 0.5in;
+        overflow: hidden;
+        position: relative;
       }
 
-      /* Two-column grid */
+      /* ===== Header (page 1 only) ===== */
+      .resume-header-wrapper {
+        margin-bottom: 0.6rem;
+      }
+
+      /* ===== Two-column grid ===== */
       .resume-grid {
         display: grid;
-        grid-template-columns: 35% 65%;
-        gap: 1.25rem;
+        grid-template-columns: 35% 1fr;
+        grid-template-rows: 1fr;
+        gap: 0 1rem;
+        min-height: 0;
       }
 
-      /* Sidebar */
+      /* Make grid fill remaining page height on page 1 */
+      .page-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      .resume-grid-fill {
+        flex: 1;
+      }
+
+      /* ===== Sidebar ===== */
       .resume-sidebar {
         background: #f5f5f5;
-        padding: 0.75rem;
+        padding: 0.6rem 0.55rem;
         border-radius: 4px;
+        min-height: 100%;
       }
 
-      /* Main content */
+      /* ===== Main content ===== */
       .resume-main {
-        padding: 0 0 0 0.25rem;
+        padding: 0 0 0 0.15rem;
       }
 
-      /* Print styles */
+      /* ===== Section headings (global overrides for font sizing) ===== */
+      .resume-page :global(.section-heading) {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #0E5484;
+        border-bottom: 1.5px solid #0E5484;
+        padding-bottom: 0.15rem;
+        margin: 0 0 0.45rem 0;
+        break-after: avoid;
+      }
+
+      /* ===== Font size overrides for larger text ===== */
+      /* Name */
+      .resume-page :global(.resume-name) {
+        font-size: 1.5rem;
+      }
+
+      /* Job titles in experience */
+      .resume-page :global(.entry-title) {
+        font-size: 0.85rem;
+      }
+
+      /* Company names */
+      .resume-page :global(.entry-company) {
+        font-size: 0.8rem;
+      }
+
+      /* Summaries / body text */
+      .resume-page :global(.entry-summary) {
+        font-size: 0.75rem;
+      }
+
+      /* Highlights */
+      .resume-page :global(.entry-highlights) {
+        font-size: 0.7rem;
+      }
+
+      /* Promotions */
+      .resume-page :global(.entry-promotions) {
+        font-size: 0.7rem;
+      }
+
+      /* Dates */
+      .resume-page :global(.entry-date) {
+        font-size: 0.65rem;
+      }
+
+      /* Skills */
+      .resume-page :global(.skill-group) {
+        font-size: 0.7rem;
+      }
+
+      .resume-page :global(.skill-name) {
+        font-size: 0.7rem;
+      }
+
+      .resume-page :global(.skill-items) {
+        font-size: 0.7rem;
+      }
+
+      .resume-page :global(.skill-note) {
+        font-size: 0.65rem;
+      }
+
+      /* Education */
+      .resume-page :global(.edu-institution) {
+        font-size: 0.75rem;
+      }
+
+      .resume-page :global(.edu-degree) {
+        font-size: 0.7rem;
+      }
+
+      .resume-page :global(.edu-years) {
+        font-size: 0.65rem;
+      }
+
+      /* Awards */
+      .resume-page :global(.award-entry) {
+        font-size: 0.7rem;
+      }
+
+      .resume-page :global(.cert-name) {
+        font-size: 0.7rem;
+      }
+
+      .resume-page :global(.cert-date) {
+        font-size: 0.65rem;
+      }
+
+      /* Body content (full view) */
+      .resume-page :global(.entry-body) {
+        font-size: 0.7rem;
+      }
+
+      /* ===== Print styles ===== */
       @media print {
         @page {
           size: letter;
           margin: 0.5in;
-        }
-
-        html {
-          font-size: 13px;
         }
 
         body {
@@ -149,8 +278,13 @@ if (isFull) {
         }
 
         .resume-page {
-          padding: 0;
-          max-width: none;
+          width: auto;
+          min-height: auto;
+          page-break-after: always;
+        }
+
+        .resume-page:last-child {
+          page-break-after: auto;
         }
 
         .resume-sidebar {
@@ -166,44 +300,78 @@ if (isFull) {
         .cert-entry {
           break-inside: avoid;
         }
-
-        .section-heading {
-          break-after: avoid;
-        }
       }
 
-      /* Screen preview helpers */
+      /* ===== Screen preview — paper document appearance ===== */
       @media screen {
         body {
-          background: #e0e0e0;
-          padding: 1rem 0;
+          background: #d0d0d0;
+          padding: 2rem 0;
         }
 
         .resume-page {
           background: #ffffff;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+          box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.12),
+            0 4px 12px rgba(0, 0, 0, 0.08);
           border-radius: 2px;
+          margin-bottom: 2rem;
+        }
+
+        .resume-page:last-child {
+          margin-bottom: 0;
+        }
+
+        /* Add inner padding for screen preview only */
+        .page-content {
+          padding: 0.5in;
         }
       }
     </style>
   </head>
   <body>
+    <!-- ==================== PAGE 1 ==================== -->
     <div class="resume-page">
-      <ResumeHeader />
+      <div class="page-content">
+        <!-- Full-width header -->
+        <div class="resume-header-wrapper">
+          <ResumeHeader />
+        </div>
 
-      <div class="resume-grid">
-        <!-- Left sidebar: skills, education -->
-        <aside class="resume-sidebar">
-          <ResumeSkills skills={isFull ? [...sidebarSkills, ...mainSkills] : sidebarSkills} />
-          <ResumeEducation education={education} />
-        </aside>
+        <!-- Two-column grid: sidebar skills + education | experience -->
+        <div class="resume-grid resume-grid-fill">
+          <aside class="resume-sidebar">
+            <ResumeSkills skills={sidebarSkills} />
+            <ResumeEducation education={education} />
+          </aside>
 
-        <!-- Right main: experience, awards, certifications -->
-        <div class="resume-main">
-          <ResumeExperience entries={experience} isFull={isFull} renderedBodies={renderedBodies} />
-          <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+          <div class="resume-main">
+            <ResumeExperience entries={page1Experience} isFull={isFull} renderedBodies={renderedBodies} />
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- ==================== PAGE 2+ ==================== -->
+    {hasPage2Content && (
+      <div class="resume-page">
+        <div class="page-content">
+          <div class="resume-grid resume-grid-fill">
+            <aside class="resume-sidebar">
+              {mainSkills.length > 0 && (
+                <ResumeSkills skills={mainSkills} />
+              )}
+            </aside>
+
+            <div class="resume-main">
+              {page2Experience.length > 0 && (
+                <ResumeExperience entries={page2Experience} isFull={isFull} renderedBodies={renderedBodies} />
+              )}
+              <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
   </body>
 </html>
