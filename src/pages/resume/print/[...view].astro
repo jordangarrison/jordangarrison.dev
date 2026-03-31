@@ -1,0 +1,593 @@
+---
+/**
+ * Hidden resume print template page.
+ * Renders a LaTeX-style per-page two-column resume layout for Playwright PDF capture.
+ * NOT linked in navigation — exists solely for PDF generation.
+ *
+ * Routes:
+ *   /resume/print/          — condensed version (professional only, brief)
+ *   /resume/print/full/     — full CV with all content
+ *
+ * Also reads ?view=full query param for dev server usage.
+ *
+ * Layout:
+ *   Page 1: Full-width header + two-column grid (sidebar skills + education | experience)
+ *   Page 2+: Two-column grid continues (overflow sidebar skills | remaining experience + awards)
+ */
+import { getCollection, render } from 'astro:content';
+import ResumeHeader from '../../../components/resume/ResumeHeader.astro';
+import ResumeSkills from '../../../components/resume/ResumeSkills.astro';
+import ResumeExperience from '../../../components/resume/ResumeExperience.astro';
+import ResumeEducation from '../../../components/resume/ResumeEducation.astro';
+import ResumeAwards from '../../../components/resume/ResumeAwards.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { view: undefined } },
+    { params: { view: 'full' } },
+  ];
+}
+
+// Determine view mode: route param takes precedence, then query param fallback
+const viewParam = Astro.params.view;
+const queryView = Astro.url.searchParams.get('view');
+const isFull = viewParam === 'full' || queryView === 'full';
+
+// Fetch all collections
+const allExperience = (await getCollection('experience'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const allSkills = (await getCollection('skills'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const education = (await getCollection('education'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const awards = (await getCollection('awards'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const certifications = (await getCollection('certifications'))
+  .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+// Filter experience based on view mode
+const experience = isFull
+  ? allExperience
+  : allExperience.filter((e) => e.data.category === 'professional');
+
+// Split skills by resume section
+const sidebarSkills = allSkills.filter((s) => s.data.resumeSection === 'sidebar');
+const mainSkills = allSkills.filter((s) => s.data.resumeSection === 'main');
+
+// Pre-render experience body content for full view
+const renderedBodies = new Map<string, any>();
+if (isFull) {
+  for (const entry of experience) {
+    if (entry.body && entry.body.trim().length > 0) {
+      try {
+        const { Content } = await render(entry);
+        renderedBodies.set(entry.id, Content);
+      } catch {
+        // Skip entries that fail to render
+      }
+    }
+  }
+}
+
+// For condensed: split experience across fixed pages
+// For full: all content flows naturally
+const page1Experience = experience.slice(0, 2);
+const page2Experience = experience.slice(2);
+const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certifications.length > 0;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Jordan Garrison — Resume{isFull ? ' (Full)' : ''}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Reset & base */
+      *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body {
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        color: #2d2d2d;
+        background: #ffffff;
+        line-height: 1.4;
+      }
+
+      /* ===== Page containers — sized to letter paper ===== */
+      .resume-page {
+        width: 7.5in;
+        min-height: 10in;
+        padding: 0;
+        margin: 0 auto;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* ===== Header (page 1 only) ===== */
+      .resume-header-wrapper {
+        margin-bottom: 0.6rem;
+      }
+
+      /* ===== Two-column grid ===== */
+      .resume-grid {
+        display: grid;
+        grid-template-columns: 35% 1fr;
+        grid-template-rows: 1fr;
+        gap: 0 1rem;
+        min-height: 0;
+      }
+
+      /* Make grid fill remaining page height on page 1 */
+      .page-body {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      .resume-grid-fill {
+        flex: 1;
+      }
+
+      /* ===== Sidebar ===== */
+      .resume-sidebar {
+        background: #f5f5f5;
+        padding: 0.6rem 0.55rem;
+        border-radius: 4px;
+        min-height: 100%;
+      }
+
+      /* ===== Main content ===== */
+      .resume-main {
+        padding: 0 0 0 0.15rem;
+      }
+
+      /* ===== Section headings (global overrides for font sizing) ===== */
+      .resume-page :global(.section-heading) {
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #0E5484;
+        border-bottom: 1.5px solid #0E5484;
+        padding-bottom: 0.15rem;
+        margin: 0 0 0.45rem 0;
+        break-after: avoid;
+      }
+
+      /* ===== Font size overrides for larger text ===== */
+      /* Name */
+      .resume-page :global(.resume-name) {
+        font-size: 1.5rem;
+      }
+
+      /* Job titles in experience */
+      .resume-page :global(.entry-title) {
+        font-size: 0.85rem;
+      }
+
+      /* Company names */
+      .resume-page :global(.entry-company) {
+        font-size: 0.8rem;
+      }
+
+      /* Summaries / body text */
+      .resume-page :global(.entry-summary) {
+        font-size: 0.75rem;
+      }
+
+      /* Highlights */
+      .resume-page :global(.entry-highlights) {
+        font-size: 0.7rem;
+      }
+
+      /* Promotions */
+      .resume-page :global(.entry-promotions) {
+        font-size: 0.7rem;
+      }
+
+      /* Dates */
+      .resume-page :global(.entry-date) {
+        font-size: 0.65rem;
+      }
+
+      /* Skills — sidebar pill overrides */
+      .resume-page :global(.pill-category) {
+        font-size: 0.55rem;
+      }
+
+      .resume-page :global(.pill-wrap) {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.12rem;
+      }
+
+      .resume-page :global(.pill) {
+        font-size: 0.45rem;
+        background: #e0e0e0;
+        color: #333;
+        padding: 0.05rem 0.2rem;
+        border-radius: 2px;
+        white-space: nowrap;
+        display: inline-block;
+      }
+
+      .resume-page :global(.pill-accent) {
+        background: #fff;
+        color: #0E5484;
+      }
+
+      .resume-page :global(.skill-featured) {
+        background: #e0ecf5;
+        padding: 0.15rem 0.25rem;
+        border-radius: 3px;
+        margin-bottom: 0.2rem;
+      }
+
+      .resume-page :global(.skill-note) {
+        font-size: 0.45rem;
+      }
+
+      /* Education */
+      .resume-page :global(.edu-institution) {
+        font-size: 0.75rem;
+      }
+
+      .resume-page :global(.edu-degree) {
+        font-size: 0.7rem;
+      }
+
+      .resume-page :global(.edu-years) {
+        font-size: 0.65rem;
+      }
+
+      /* Awards */
+      .resume-page :global(.award-entry) {
+        font-size: 0.7rem;
+      }
+
+      .resume-page :global(.cert-name) {
+        font-size: 0.7rem;
+      }
+
+      .resume-page :global(.cert-date) {
+        font-size: 0.65rem;
+      }
+
+      /* Body content (full view) */
+      .resume-page :global(.entry-body) {
+        font-size: 0.7rem;
+      }
+
+      /* ===== Full view: flowing layout ===== */
+      .resume-flow {
+        max-width: 7.5in;
+        margin: 0 auto;
+      }
+
+      .resume-flow .resume-header-wrapper {
+        margin-bottom: 0.6rem;
+      }
+
+      .skills-bar {
+        background: #f5f5f5;
+        padding: 0.4rem 0.5rem;
+        border-radius: 4px;
+        margin-bottom: 0.4rem;
+      }
+
+      .skills-bar .skills-heading {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #0E5484;
+        border-bottom: 1.5px solid #0E5484;
+        padding-bottom: 0.1rem;
+        margin: 0 0 0.3rem 0;
+      }
+
+      /* Specialized skills - full width with accent */
+      .skills-featured {
+        background: #e0ecf5;
+        padding: 0.25rem 0.4rem;
+        border-radius: 3px;
+        margin-bottom: 0.3rem;
+      }
+
+      .skills-featured .pill-category {
+        font-size: 0.6rem;
+        font-weight: 600;
+        color: #0E5484;
+        margin-bottom: 0.15rem;
+      }
+
+      .skills-featured .pill-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.15rem;
+      }
+
+      .skills-featured .pill {
+        font-size: 0.55rem;
+        background: #fff;
+        color: #0E5484;
+        padding: 0.05rem 0.35rem;
+        border-radius: 2px;
+        white-space: nowrap;
+      }
+
+      /* Regular skills grid */
+      .skills-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0.25rem 0.75rem;
+      }
+
+      .pill-group {
+        margin-bottom: 0;
+      }
+
+      .pill-category {
+        font-size: 0.55rem;
+        font-weight: 600;
+        color: #0E5484;
+        margin-bottom: 0.1rem;
+      }
+
+      .pill-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.12rem;
+      }
+
+      .pill {
+        font-size: 0.5rem;
+        background: #e8e8e8;
+        color: #333;
+        padding: 0.05rem 0.3rem;
+        border-radius: 2px;
+        white-space: nowrap;
+      }
+
+      .education-bar {
+        margin-bottom: 0.4rem;
+      }
+
+      .education-bar :global(.resume-education) {
+        margin-bottom: 0;
+      }
+
+      .education-bar :global(.edu-institution) {
+        font-size: 0.65rem;
+      }
+
+      .education-bar :global(.edu-degree),
+      .education-bar :global(.edu-years) {
+        font-size: 0.6rem;
+      }
+
+      /* ===== Print styles ===== */
+      @media print {
+        @page {
+          size: letter;
+          margin: 0.5in;
+        }
+
+        body {
+          background: #ffffff;
+        }
+
+        .resume-page {
+          width: auto;
+          min-height: auto;
+          page-break-after: always;
+        }
+
+        .resume-page:last-child {
+          page-break-after: auto;
+        }
+
+        .resume-sidebar,
+        .skills-bar {
+          background: #f5f5f5 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .skills-featured {
+          background: #e0ecf5 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .skills-featured .pill {
+          background: #fff !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .pill,
+        .resume-page :global(.pill) {
+          background: #e8e8e8 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .resume-page :global(.pill-accent) {
+          background: #fff !important;
+        }
+
+        .resume-page :global(.skill-featured) {
+          background: #e0ecf5 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+
+        .resume-flow {
+          max-width: none;
+        }
+
+        .experience-entry,
+        .skill-group,
+        .education-entry,
+        .award-entry,
+        .cert-entry {
+          break-inside: avoid;
+        }
+      }
+
+      /* ===== Screen preview — paper document appearance ===== */
+      @media screen {
+        body {
+          background: #d0d0d0;
+          padding: 2rem 0;
+        }
+
+        .resume-page {
+          background: #ffffff;
+          box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.12),
+            0 4px 12px rgba(0, 0, 0, 0.08);
+          border-radius: 2px;
+          margin-bottom: 2rem;
+        }
+
+        .resume-page:last-child {
+          margin-bottom: 0;
+        }
+
+        /* Add inner padding for screen preview only */
+        .page-content {
+          padding: 0.5in;
+        }
+
+        .resume-flow {
+          background: #ffffff;
+          box-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.12),
+            0 4px 12px rgba(0, 0, 0, 0.08);
+          border-radius: 2px;
+          padding: 0.5in;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {isFull ? (
+      <!-- ==================== FULL VIEW: FLOWING LAYOUT ==================== -->
+      <div class="resume-flow">
+        <div class="resume-header-wrapper">
+          <ResumeHeader />
+        </div>
+
+        <!-- Skills as tag pills -->
+        <div class="skills-bar">
+          <h2 class="skills-heading">Skills</h2>
+
+          {/* Specialized skills featured at top */}
+          {allSkills.filter(s => s.data.name === 'Specialized Skills').map((skill) => (
+            <div class="skills-featured">
+              <div class="pill-category">{skill.data.name}</div>
+              <div class="pill-wrap">
+                {skill.data.items.map((item) => (
+                  <span class="pill">{item}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* Rest in 3-column grid */}
+          <div class="skills-grid">
+            {allSkills.filter(s => s.data.name !== 'Specialized Skills').map((skill) => (
+              <div class="pill-group">
+                <div class="pill-category">{skill.data.name}</div>
+                <div class="pill-wrap">
+                  {skill.data.items.map((item) => (
+                    <span class="pill">{item}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Education inline -->
+        <div class="education-bar">
+          <ResumeEducation education={education} />
+        </div>
+
+        <!-- Awards & Certifications first (eye-catching) -->
+        <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+
+        <!-- All experience flows naturally -->
+        <ResumeExperience entries={experience} isFull={isFull} renderedBodies={renderedBodies} />
+      </div>
+    ) : (
+      <!-- ==================== CONDENSED: FIXED TWO-PAGE LAYOUT ==================== -->
+      <!-- PAGE 1 -->
+      <div class="resume-page">
+        <div class="page-content">
+          <div class="resume-header-wrapper">
+            <ResumeHeader />
+          </div>
+
+          <div class="resume-grid resume-grid-fill">
+            <aside class="resume-sidebar">
+              <ResumeSkills skills={sidebarSkills} />
+              <ResumeEducation education={education} />
+            </aside>
+
+            <div class="resume-main">
+              <ResumeExperience entries={page1Experience} isFull={isFull} renderedBodies={renderedBodies} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 2 -->
+      {hasPage2Content && (
+        <div class="resume-page">
+          <div class="page-content">
+            <div class="resume-grid resume-grid-fill">
+              <aside class="resume-sidebar">
+                {mainSkills.length > 0 && (
+                  <ResumeSkills skills={mainSkills} />
+                )}
+              </aside>
+
+              <div class="resume-main">
+                {page2Experience.length > 0 && (
+                  <ResumeExperience entries={page2Experience} isFull={isFull} renderedBodies={renderedBodies} />
+                )}
+                <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    )}
+  </body>
+</html>

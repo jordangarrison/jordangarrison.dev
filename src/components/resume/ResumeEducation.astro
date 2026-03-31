@@ -1,0 +1,76 @@
+---
+/**
+ * Renders education entries for the print resume.
+ */
+interface EducationEntry {
+  data: {
+    institution: string;
+    degree: string;
+    major: string;
+    minor?: string;
+    startYear: number;
+    endYear: number;
+    sortOrder: number;
+  };
+}
+
+interface Props {
+  education: EducationEntry[];
+}
+
+const { education } = Astro.props;
+const sorted = [...education].sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+---
+
+<section class="resume-education">
+  <h2 class="section-heading">Education</h2>
+  {sorted.map((edu) => (
+    <div class="education-entry">
+      <div class="edu-institution">{edu.data.institution}</div>
+      <div class="edu-degree">
+        {edu.data.degree}, {edu.data.major}
+        {edu.data.minor && <span> | Minor: {edu.data.minor}</span>}
+      </div>
+      <div class="edu-years">{edu.data.startYear} &ndash; {edu.data.endYear}</div>
+    </div>
+  ))}
+</section>
+
+<style>
+  .resume-education {
+    margin-bottom: 0.75rem;
+  }
+
+  .section-heading {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #0E5484;
+    border-bottom: 1.5px solid #0E5484;
+    padding-bottom: 0.15rem;
+    margin: 0 0 0.4rem 0;
+  }
+
+  .education-entry {
+    margin-bottom: 0.3rem;
+    break-inside: avoid;
+  }
+
+  .edu-institution {
+    font-weight: 700;
+    font-size: 0.7rem;
+    color: #2d2d2d;
+  }
+
+  .edu-degree {
+    font-size: 0.65rem;
+    color: #444;
+  }
+
+  .edu-years {
+    font-family: 'Source Code Pro Variable', 'Source Code Pro', monospace;
+    font-size: 0.6rem;
+    color: #666;
+  }
+</style>

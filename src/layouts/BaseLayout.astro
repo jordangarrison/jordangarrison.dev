@@ -6,11 +6,13 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
+  fullWidth?: boolean;
 }
 
 const {
   title,
   description = 'Jordan Garrison — Engineer, lifelong learner, relentlessly curious.',
+  fullWidth = false,
 } = Astro.props;
 ---
 
@@ -35,7 +37,7 @@ const {
   </head>
   <body class="min-h-screen flex flex-col">
     <Navbar />
-    <main class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-8">
+    <main class:list={['flex-1 w-full mx-auto px-4 sm:px-6 py-8', fullWidth ? '' : 'max-w-5xl']}>
       <slot />
     </main>
     <Footer />

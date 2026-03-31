@@ -1,0 +1,149 @@
+---
+/**
+ * Renders awards and certifications for the print resume.
+ * Condensed: awards compact single-line; certifications name and date only.
+ * Full: same awards; certifications include credential ID and description.
+ */
+interface AwardEntry {
+  data: {
+    title: string;
+    years: number[];
+    organization: string;
+    sortOrder: number;
+  };
+}
+
+interface CertificationEntry {
+  data: {
+    name: string;
+    date: string;
+    credentialId?: string;
+    description?: string;
+    sortOrder: number;
+  };
+}
+
+interface Props {
+  awards: AwardEntry[];
+  certifications: CertificationEntry[];
+  isFull: boolean;
+}
+
+const { awards, certifications, isFull } = Astro.props;
+
+const sortedAwards = [...awards].sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+const sortedCerts = [...certifications].sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+function formatAwardYears(years: number[]): string {
+  if (years.length === 1) return String(years[0]);
+  return years.join(', ');
+}
+
+function formatCertDate(date: string): string {
+  const [year, month] = date.split('-');
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  return `${months[parseInt(month) - 1]} ${year}`;
+}
+---
+
+{sortedAwards.length > 0 && (
+  <section class="resume-awards">
+    <h2 class="section-heading">Awards & Recognition</h2>
+    {sortedAwards.map((award) => (
+      <div class="award-entry">
+        <span class="award-title">{award.data.title}</span>
+        <span class="award-meta"> &mdash; {award.data.organization}, {formatAwardYears(award.data.years)}</span>
+      </div>
+    ))}
+  </section>
+)}
+
+{sortedCerts.length > 0 && (
+  <section class="resume-certs">
+    <h2 class="section-heading">Certifications</h2>
+    {sortedCerts.map((cert) => (
+      <div class="cert-entry">
+        <div class="cert-header">
+          <span class="cert-name">{cert.data.name}</span>
+          <span class="cert-date">{formatCertDate(cert.data.date)}</span>
+        </div>
+        {isFull && cert.data.credentialId && (
+          <div class="cert-credential">Credential ID: {cert.data.credentialId}</div>
+        )}
+        {isFull && cert.data.description && (
+          <div class="cert-description">{cert.data.description}</div>
+        )}
+      </div>
+    ))}
+  </section>
+)}
+
+<style>
+  .resume-awards,
+  .resume-certs {
+    margin-bottom: 0.75rem;
+  }
+
+  .section-heading {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #0E5484;
+    border-bottom: 1.5px solid #0E5484;
+    padding-bottom: 0.15rem;
+    margin: 0 0 0.4rem 0;
+    break-after: avoid;
+  }
+
+  .award-entry {
+    font-size: 0.65rem;
+    line-height: 1.4;
+    margin-bottom: 0.1rem;
+    break-inside: avoid;
+  }
+
+  .award-title {
+    font-weight: 600;
+    color: #2d2d2d;
+  }
+
+  .award-meta {
+    color: #666;
+  }
+
+  .cert-entry {
+    margin-bottom: 0.25rem;
+    break-inside: avoid;
+  }
+
+  .cert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .cert-name {
+    font-weight: 600;
+    font-size: 0.65rem;
+    color: #2d2d2d;
+  }
+
+  .cert-date {
+    font-family: 'Source Code Pro Variable', 'Source Code Pro', monospace;
+    font-size: 0.6rem;
+    color: #666;
+  }
+
+  .cert-credential {
+    font-size: 0.6rem;
+    color: #666;
+    font-style: italic;
+  }
+
+  .cert-description {
+    font-size: 0.6rem;
+    color: #444;
+    line-height: 1.4;
+  }
+</style>
