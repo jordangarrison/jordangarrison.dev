@@ -40,8 +40,8 @@ if (!process.env.PLAYWRIGHT_BROWSERS_PATH) {
 const DIST_DIR = resolve(process.cwd(), 'dist');
 
 const PDF_PAGES = [
-  { path: '/resume/print/', output: 'resume.pdf' },
-  { path: '/resume/print/full/', output: 'resume-full.pdf' },
+  { path: '/resume/print/', output: 'jordan-garrison-resume.pdf' },
+  { path: '/resume/print/full/', output: 'jordan-garrison-resume-full.pdf' },
 ];
 
 /**

@@ -29,7 +29,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <!-- Download Button -->
         <a
           id="download-btn"
-          href="/resume.pdf"
+          href="/jordan-garrison-resume.pdf"
           download="jordan-garrison-resume.pdf"
           class="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-rp-surface border border-rp-highlight-med text-rp-subtle hover:text-rp-text hover:border-rp-rose/50 rounded-lg transition-all duration-200 no-underline"
         >
@@ -45,7 +45,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <div class="rounded-xl overflow-hidden border border-rp-highlight-med shadow-sm" style="height: 80vh;">
       <embed
         id="pdf-viewer"
-        src="/resume.pdf"
+        src="/jordan-garrison-resume.pdf"
         type="application/pdf"
         width="100%"
         height="100%"
@@ -60,7 +60,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </p>
       <a
         id="fallback-download-btn"
-        href="/resume.pdf"
+        href="/jordan-garrison-resume.pdf"
         download="jordan-garrison-resume.pdf"
         class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-rose text-rp-base rounded-lg hover:opacity-90 transition-opacity no-underline"
       >
@@ -78,10 +78,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           JavaScript is required for the view toggle. You can still download the resume directly.
         </p>
         <div class="flex flex-wrap gap-3 justify-center">
-          <a href="/resume.pdf" download="jordan-garrison-resume.pdf" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-rose text-rp-base rounded-lg no-underline">
+          <a href="/jordan-garrison-resume.pdf" download="jordan-garrison-resume.pdf" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-rose text-rp-base rounded-lg no-underline">
             Download Condensed PDF
           </a>
-          <a href="/resume-full.pdf" download="jordan-garrison-resume-full.pdf" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-surface border border-rp-highlight-med text-rp-subtle rounded-lg no-underline">
+          <a href="/jordan-garrison-resume-full.pdf" download="jordan-garrison-resume-full.pdf" class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-rp-surface border border-rp-highlight-med text-rp-subtle rounded-lg no-underline">
             Download Full PDF
           </a>
         </div>
@@ -94,8 +94,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   type ViewMode = 'condensed' | 'full';
 
   const PDF_URLS: Record<ViewMode, string> = {
-    condensed: '/resume.pdf',
-    full: '/resume-full.pdf',
+    condensed: '/jordan-garrison-resume.pdf',
+    full: '/jordan-garrison-resume-full.pdf',
   };
 
   const DOWNLOAD_NAMES: Record<ViewMode, string> = {
