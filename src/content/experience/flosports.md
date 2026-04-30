@@ -1,13 +1,13 @@
 ---
 company: "FloSports"
-title: "Tech Lead Manager, SRE"
+title: "Technical Director of SRE"
 image: "https://flocms.flosports.tv/wp-content/uploads/2026/02/FloSports-Secondary-igniteblack.svg"
 url: "https://www.flosports.tv"
 startDate: "2019-11"
 endDate: null
 sortOrder: 1
 category: "professional"
-summary: "From Infrastructure Engineer to Tech Lead Manager. Building developer platforms, driving cloud migrations, and establishing SRE practices for a live sports streaming platform."
+summary: "From Infrastructure Engineer to Technical Director of SRE. Leading reliability strategy, developer platforms, cloud infrastructure, and SRE practices for a live sports streaming platform."
 promotions:
   - title: "Infrastructure Engineer"
     date: "2019"
@@ -15,6 +15,8 @@ promotions:
     date: "2021"
   - title: "Tech Lead Manager, SRE"
     date: "2023"
+  - title: "Technical Director of SRE"
+    date: "2026"
 highlights:
   - title: "GCP to AWS Cloud Migration"
     description: "Architected and executed full cloud consolidation from GCP to AWS. Migrated 20+ services including databases, caches, and CI/CD pipelines to EKS with zero downtime. Created self-service migration templates for teams."

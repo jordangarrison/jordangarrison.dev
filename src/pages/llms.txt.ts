@@ -17,7 +17,7 @@ export async function GET(context: APIContext) {
   const lines: string[] = [
     '# jordangarrison.dev',
     '',
-    '> Jordan Garrison — Tech Lead & SRE at FloSports. Engineer, lifelong learner, relentlessly curious.',
+    '> Jordan Garrison — Technical Director of SRE at FloSports. Engineer, lifelong learner, relentlessly curious.',
     '',
     '## About',
     `- [Home](${site}/)`,

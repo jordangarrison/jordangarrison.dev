@@ -34,6 +34,25 @@ function formatCertDate(date: string): string {
   return year;
 }
 
+const recognitionItems = [
+  ...awards.map((award) => ({
+    title: award.data.title,
+    detail: `${award.data.organization}, ${formatAwardYears(award.data.years)}`,
+    sortDate: `${Math.max(...award.data.years)}-12`,
+    sortOrder: award.data.sortOrder,
+  })),
+  ...certifications.map((cert) => ({
+    title: cert.data.name,
+    detail: formatCertDate(cert.data.date),
+    sortDate: cert.data.date,
+    sortOrder: cert.data.sortOrder,
+  })),
+].sort((a, b) =>
+  b.sortDate.localeCompare(a.sortDate) ||
+  a.sortOrder - b.sortOrder ||
+  a.title.localeCompare(b.title)
+);
+
 // Cycle through Rose Pine accent colors for skill categories
 const skillColors = [
   { bg: 'bg-rp-pine/20', text: 'text-rp-pine' },
@@ -139,16 +158,10 @@ const skillColors = [
         Awards &amp; Certifications
       </h2>
       <ul class="divide-y divide-rp-highlight-low">
-        {certifications.map((cert) => (
+        {recognitionItems.map((item) => (
           <li class="py-3 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-            <span class="text-rp-text font-medium">{cert.data.name}</span>
-            <span class="text-sm text-rp-muted">{formatCertDate(cert.data.date)}</span>
-          </li>
-        ))}
-        {awards.map((award) => (
-          <li class="py-3 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-            <span class="text-rp-text font-medium">{award.data.title}</span>
-            <span class="text-sm text-rp-muted">{award.data.organization}, {formatAwardYears(award.data.years)}</span>
+            <span class="text-rp-text font-medium">{item.title}</span>
+            <span class="text-sm text-rp-muted">{item.detail}</span>
           </li>
         ))}
       </ul>

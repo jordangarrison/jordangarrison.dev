@@ -19,7 +19,7 @@ export async function GET(context: APIContext) {
   sections.push(
     '# jordangarrison.dev',
     '',
-    '> Jordan Garrison — Tech Lead & SRE at FloSports. Engineer, lifelong learner, relentlessly curious.',
+    '> Jordan Garrison — Technical Director of SRE at FloSports. Engineer, lifelong learner, relentlessly curious.',
     '',
     `Site: ${site}`,
     ''
@@ -51,6 +51,7 @@ export async function GET(context: APIContext) {
     '### Awards & Certifications',
     '',
     '- Advanced GitOps Certification — Akuity, 2024',
+    '- Promotion to Technical Director of SRE — FloSports, 2026',
     '- Promotion to Tech Lead — FloSports, 2023',
     '- Top Performer - Own It Award — FloSports, 2021',
     '- Promotion to Senior Infrastructure Engineer — FloSports, 2021',
