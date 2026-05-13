@@ -3,14 +3,14 @@ title: "Making Brave's Web Speech API work on NixOS"
 date: "2026-05-12"
 categories: ["nix"]
 tags: ["nixos", "brave", "chromium", "speech-dispatcher", "web-speech-api", "tts", "debugging"]
-excerpt: "I built a typing app for my toddler. Audio worked on every device except my dev box. The fix took three patches and uncovered a nixpkgs bug that's been open since 2018."
+excerpt: "I was adding a typing game to a webapp I made for my kids. Audio worked on every device except my dev box. The fix took three patches and uncovered a nixpkgs bug that's been open since 2018."
 published: true
 readingTime: "10 min read"
 ---
 
-I built a tiny browser app for my toddler. She's at the age where she'll pound the keyboard for an hour straight, so I wrote something that announces the letter, number, or symbol she just hit. Big rainbow letter on screen, voice reads it out, repeat. The Web Speech API does all the heavy lifting in 30 lines of code.
+I was adding a typing game to a little webapp I made for my kids. Big rainbow letter on screen, voice reads it out, repeat. Letter recognition for the toddler, long-form narration for the kindergartner who's reading past her independent level. The Web Speech API does the heavy lifting in about 30 lines of code. (More on the webapp itself in a follow-up post.)
 
-It worked on the Mac. It worked on the iPad. It did not work on my NixOS workstation, which is where I happened to be developing it. Every utterance fired `synthesis-failed` and `speechSynthesis.getVoices()` returned `[]`.
+It worked on the Mac. It worked on the iPad. It did not work on my NixOS workstation, which is where I was building it. It also did not work on the girls' mini NixOS box at the little table next to my desk, which is the machine they actually use when they're home with me and I'm working. Every utterance fired `synthesis-failed` and `speechSynthesis.getVoices()` returned `[]`.
 
 What followed was a multi-hour rabbit hole that ended with three patches, a managed-policy file, and a much clearer understanding of how Linux desktops do text-to-speech. The short version: TTS in the browser on Linux is held together with string, and most of the string is missing on NixOS by default.
 
