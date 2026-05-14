@@ -14,10 +14,10 @@ import { projectGroups } from '../data/portfolio';
     <!-- Filter Tabs -->
     <div class="flex flex-wrap gap-2 mb-8 justify-center">
       <button
-        data-filter="all"
+        data-filter="highlights"
         class="filter-tab bg-rp-rose text-rp-base px-4 py-2 text-sm font-medium rounded-full transition-colors cursor-pointer"
       >
-        All
+        Highlights
       </button>
       {projectGroups.map(group => (
         <button
@@ -27,6 +27,12 @@ import { projectGroups } from '../data/portfolio';
           {group.title}
         </button>
       ))}
+      <button
+        data-filter="all"
+        class="filter-tab text-rp-subtle hover:text-rp-text hover:bg-rp-highlight-low px-4 py-2 text-sm font-medium rounded-full transition-colors cursor-pointer"
+      >
+        All
+      </button>
     </div>
 
     <!-- Project Groups -->
@@ -35,7 +41,9 @@ import { projectGroups } from '../data/portfolio';
         <h3 class="text-xl font-semibold text-rp-text mb-4 pb-2 border-b border-rp-highlight-med">{group.title}</h3>
         <div class="grid gap-6">
           {group.projects.map(project => (
-            <PortfolioCard project={project} />
+            <div class="project-card-wrapper" data-pinned={project.pinned ? 'true' : 'false'}>
+              <PortfolioCard project={project} />
+            </div>
           ))}
         </div>
       </div>
@@ -46,30 +54,58 @@ import { projectGroups } from '../data/portfolio';
 <script>
   function initFilters() {
     const tabs = document.querySelectorAll('.filter-tab');
-    const groups = document.querySelectorAll('.project-group');
+    const groups = document.querySelectorAll<HTMLElement>('.project-group');
+    const cards = document.querySelectorAll<HTMLElement>('.project-card-wrapper');
 
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const filter = tab.getAttribute('data-filter');
-
-        // Update active tab styling
-        tabs.forEach(t => {
+    function applyFilter(filter: string) {
+      tabs.forEach(t => {
+        const isActive = t.getAttribute('data-filter') === filter;
+        if (isActive) {
+          t.classList.add('bg-rp-rose', 'text-rp-base');
+          t.classList.remove('text-rp-subtle', 'hover:text-rp-text', 'hover:bg-rp-highlight-low');
+        } else {
           t.classList.remove('bg-rp-rose', 'text-rp-base');
           t.classList.add('text-rp-subtle', 'hover:text-rp-text', 'hover:bg-rp-highlight-low');
-        });
-        tab.classList.add('bg-rp-rose', 'text-rp-base');
-        tab.classList.remove('text-rp-subtle', 'hover:text-rp-text', 'hover:bg-rp-highlight-low');
+        }
+      });
 
-        // Show/hide groups
+      if (filter === 'highlights') {
+        cards.forEach(card => {
+          if (card.getAttribute('data-pinned') === 'true') {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
         groups.forEach(group => {
-          if (filter === 'all' || group.getAttribute('data-category') === filter) {
+          const hasVisible = group.querySelector('.project-card-wrapper:not(.hidden)');
+          if (hasVisible) {
             group.classList.remove('hidden');
           } else {
             group.classList.add('hidden');
           }
         });
+        return;
+      }
+
+      cards.forEach(card => card.classList.remove('hidden'));
+      groups.forEach(group => {
+        if (filter === 'all' || group.getAttribute('data-category') === filter) {
+          group.classList.remove('hidden');
+        } else {
+          group.classList.add('hidden');
+        }
+      });
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const filter = tab.getAttribute('data-filter');
+        if (filter) applyFilter(filter);
       });
     });
+
+    applyFilter('highlights');
   }
 
   initFilters();
