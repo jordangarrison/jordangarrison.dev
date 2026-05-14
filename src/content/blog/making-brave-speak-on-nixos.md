@@ -131,6 +131,8 @@ environment.etc."brave/policies/managed/disable-bad-flag-warnings.json".text =
 
 Restarted Brave. Visited `brave://policy/` to confirm the policy was loaded. Warning bar gone. TTS still working.
 
+The whole thing lives in [one nix-config commit](https://github.com/jordangarrison/nix-config/commit/b6c1138) if you want to copy it.
+
 ## What this actually costs you
 
 Three things in this stack weaken Brave's security posture, and I want to be honest about each one before anyone copy-pastes this into their own config.
