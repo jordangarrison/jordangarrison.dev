@@ -7,6 +7,7 @@ export type PortfolioProject = {
 	downloadUrl: string | null;
 	techStack: string[];
 	features: string[];
+	pinned?: boolean;
 };
 
 export type PortfolioCategory = 'tools' | 'nix' | 'ai';
@@ -24,7 +25,7 @@ export const toolsProjects: PortfolioProject[] = [
 		description: 'Automatically revoke exposed credentials before they can be exploited. A security automation tool with a plugin architecture for credential detection and revocation.',
 		githubUrl: 'https://github.com/jordangarrison/yoink',
 		liveUrl: null,
-		downloadUrl: 'https://github.com/jordangarrison/yoink/releases/latest',
+		downloadUrl: null,
 		techStack: ['Go', 'Plugin Architecture', 'Security'],
 		features: ['Automatic credential detection', 'Plugin-based revocation engines', 'Multiple credential type support', 'CI/CD integration ready', 'Extensible architecture']
 	},
@@ -66,17 +67,30 @@ export const toolsProjects: PortfolioProject[] = [
 		liveUrl: null,
 		downloadUrl: null,
 		techStack: ['Rust', 'whisper.cpp', 'TUI', 'Nix'],
-		features: ['Local speech-to-text transcription', 'No cloud required - fully offline', 'TUI with visual feedback and audio level meter', 'Auto-paste to clipboard with window manager integration', 'Automatic model downloading and management', 'XDG-compliant configuration with Nix flake packaging']
+		features: ['Local speech-to-text transcription', 'No cloud required - fully offline', 'TUI with visual feedback and audio level meter', 'Auto-paste to clipboard with window manager integration', 'Automatic model downloading and management', 'XDG-compliant configuration with Nix flake packaging'],
+		pinned: true
 	},
 	{
 		id: 15,
 		title: 'greenlight',
-		description: 'GitHub Actions workflow visualizer built with Phoenix LiveView. View CI/CD pipelines as interactive DAGs.',
+		description: 'GitHub Actions workflow visualizer built with Ash, Phoenix LiveView, and Live Svelte. View CI/CD pipelines as interactive DAGs.',
 		githubUrl: 'https://github.com/jordangarrison/greenlight',
 		liveUrl: null,
+		downloadUrl: 'https://github.com/jordangarrison/greenlight/releases/latest',
+		techStack: ['Elixir', 'Phoenix LiveView', 'Svelte', 'Ash', 'Nix'],
+		features: ['Interactive DAG visualization of workflows', 'Real-time polling of workflow run status', 'Expandable job nodes with dependency graphs', 'Dashboard for followed orgs and bookmarked repos', 'Pipeline view per commit with dependency resolution'],
+		pinned: true
+	},
+	{
+		id: 16,
+		title: 'drawl',
+		description: 'Diagrams Rendered As Walked Lists. A Lisp for diagrams — C4-aligned, browser-native, CLI-friendly.',
+		githubUrl: 'https://github.com/jordangarrison/drawl',
+		liveUrl: 'https://drawl.jordangarrison.dev',
 		downloadUrl: null,
-		techStack: ['Elixir', 'Phoenix LiveView', 'Svelte', 'Nix'],
-		features: ['Interactive DAG visualization of workflows', 'Real-time polling of workflow run status', 'Expandable job nodes with dependency graphs', 'Dashboard for followed orgs and bookmarked repos', 'Pipeline view per commit with dependency resolution']
+		techStack: ['Clojure', 'ClojureScript', 'shadow-cljs', 'Babashka', 'Nix'],
+		features: ['Lisp surface for declaring C4-aligned diagrams', 'Single .cljc core targets browser SPA, Babashka CLI, and JVM library', 'Multiple emitters: graphviz dot, mermaid C4, Excalidraw', 'Level inference (context/container/component) with at-level filtering', 'Live browser preview with CodeMirror 6 + paredit editing', 'NixOS module for self-hosting the SPA'],
+		pinned: true
 	}
 ];
 
@@ -89,7 +103,8 @@ export const nixProjects: PortfolioProject[] = [
 		liveUrl: null,
 		downloadUrl: null,
 		techStack: ['Nix', 'NixOS', 'Home Manager', 'Flakes', 'Emacs Lisp'],
-		features: ['Fully declarative system configuration', 'Reproducible across machines', 'Home Manager integration', 'Flakes-based architecture', 'Development environment shells']
+		features: ['Fully declarative system configuration', 'Reproducible across machines', 'Home Manager integration', 'Flakes-based architecture', 'Development environment shells'],
+		pinned: true
 	},
 	{
 		id: 5,
@@ -127,7 +142,7 @@ export const nixProjects: PortfolioProject[] = [
 		description: 'Small utility to export AWS environment variables to your shell in an SSO environment.',
 		githubUrl: 'https://github.com/jordangarrison/aws-use-sso',
 		liveUrl: null,
-		downloadUrl: null,
+		downloadUrl: 'https://github.com/jordangarrison/aws-use-sso/releases/latest',
 		techStack: ['Nix', 'AWS', 'SSO', 'Shell'],
 		features: ['AWS SSO integration', 'Environment variable export', 'Shell-friendly output', 'Nix flake packaging']
 	}
@@ -162,17 +177,19 @@ export const aiProjects: PortfolioProject[] = [
 		liveUrl: null,
 		downloadUrl: null,
 		techStack: ['Rust', 'CLI', 'AI Agents', 'Nix'],
-		features: ['Stateful prompts re-read each iteration', 'PRD tracking with story-based progress', 'Automatic completion detection', 'Event-driven architecture for TUI/CLI', 'Graceful cancellation support']
+		features: ['Stateful prompts re-read each iteration', 'PRD tracking with story-based progress', 'Automatic completion detection', 'Event-driven architecture for TUI/CLI', 'Graceful cancellation support'],
+		pinned: true
 	},
 	{
 		id: 14,
 		title: 'panko',
-		description: 'Breadcrumbs for AI coding sessions - view and share Claude Code transcripts via web viewer and tunnels.',
+		description: 'Breadcrumbs for AI coding sessions - view and share Claude Code transcripts.',
 		githubUrl: 'https://github.com/jordangarrison/panko',
 		liveUrl: null,
 		downloadUrl: null,
-		techStack: ['Rust', 'Web', 'Cloudflare Tunnels', 'Nix'],
-		features: ['View Claude Code sessions in web browser', 'Share sessions via Cloudflare, ngrok, or Tailscale tunnels', 'TUI for browsing session transcripts', 'Nix flake with configurable tunnel providers']
+		techStack: ['Elixir', 'Phoenix', 'HTML', 'JavaScript', 'Nix'],
+		features: ['View Claude Code sessions in web browser', 'Share sessions via Cloudflare, ngrok, or Tailscale tunnels', 'TUI for browsing session transcripts', 'Nix flake with configurable tunnel providers'],
+		pinned: true
 	}
 ];
 
