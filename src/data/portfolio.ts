@@ -91,6 +91,17 @@ export const toolsProjects: PortfolioProject[] = [
 		techStack: ['Clojure', 'ClojureScript', 'shadow-cljs', 'Babashka', 'Nix'],
 		features: ['Lisp surface for declaring C4-aligned diagrams', 'Single .cljc core targets browser SPA, Babashka CLI, and JVM library', 'Multiple emitters: graphviz dot, mermaid C4, Excalidraw', 'Level inference (context/container/component) with at-level filtering', 'Live browser preview with CodeMirror 6 + paredit editing', 'NixOS module for self-hosting the SPA'],
 		pinned: true
+	},
+	{
+		id: 17,
+		title: 'focus-fox',
+		description: 'Terminal-based pomodoro timer with work sessions, short breaks, and long breaks, featuring a big clock and a progress ring with a fox in the middle.',
+		githubUrl: 'https://github.com/jordangarrison/focus-fox',
+		liveUrl: null,
+		downloadUrl: null,
+		techStack: ['Rust', 'Ratatui', 'TUI', 'Nix'],
+		features: ['Configurable work, short break, and long break intervals', 'Big clock with a progress ring and fox animation', 'Desktop notifications on phase transitions', 'TUI config menu with vim-style keys, persisted to config.toml', 'Pause, skip, and restart controls mid-session', 'Nix flake packaging with notify-send wrapped onto PATH'],
+		pinned: true
 	}
 ];
 
