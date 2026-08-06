@@ -497,32 +497,20 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
   </head>
   <body>
     {isFull ? (
-      <!-- ==================== FULL VIEW: FLOWING LAYOUT ==================== -->
-      <div class="resume-flow">
-        <div class="resume-header-wrapper">
-          <ResumeHeader />
-        </div>
+      <>
+        <!-- ==================== FULL VIEW: FLOWING LAYOUT ==================== -->
+        <div class="resume-flow">
+          <div class="resume-header-wrapper">
+            <ResumeHeader />
+          </div>
 
-        <!-- Skills as tag pills -->
-        <div class="skills-bar">
-          <h2 class="skills-heading">Skills</h2>
+          <!-- Skills as tag pills -->
+          <div class="skills-bar">
+            <h2 class="skills-heading">Skills</h2>
 
-          {/* Specialized skills featured at top */}
-          {allSkills.filter(s => s.data.name === 'Specialized Skills').map((skill) => (
-            <div class="skills-featured">
-              <div class="pill-category">{skill.data.name}</div>
-              <div class="pill-wrap">
-                {skill.data.items.map((item) => (
-                  <span class="pill">{item}</span>
-                ))}
-              </div>
-            </div>
-          ))}
-
-          {/* Rest in 3-column grid */}
-          <div class="skills-grid">
-            {allSkills.filter(s => s.data.name !== 'Specialized Skills').map((skill) => (
-              <div class="pill-group">
+            {/* Specialized skills featured at top */}
+            {allSkills.filter(s => s.data.name === 'Specialized Skills').map((skill) => (
+              <div class="skills-featured">
                 <div class="pill-category">{skill.data.name}</div>
                 <div class="pill-wrap">
                   {skill.data.items.map((item) => (
@@ -531,63 +519,79 @@ const hasPage2Content = page2Experience.length > 0 || awards.length > 0 || certi
                 </div>
               </div>
             ))}
-          </div>
-        </div>
 
-        <!-- Education inline -->
-        <div class="education-bar">
-          <ResumeEducation education={education} />
-        </div>
-
-        <!-- Awards & Certifications first (eye-catching) -->
-        <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
-
-        <!-- All experience flows naturally -->
-        <ResumeExperience entries={experience} isFull={isFull} renderedBodies={renderedBodies} />
-      </div>
-    ) : (
-      <!-- ==================== CONDENSED: FIXED TWO-PAGE LAYOUT ==================== -->
-      <!-- PAGE 1 -->
-      <div class="resume-page">
-        <div class="page-content">
-          <div class="resume-header-wrapper">
-            <ResumeHeader />
-          </div>
-
-          <div class="resume-grid resume-grid-fill">
-            <aside class="resume-sidebar">
-              <ResumeSkills skills={sidebarSkills} />
-              <ResumeEducation education={education} />
-            </aside>
-
-            <div class="resume-main">
-              <ResumeExperience entries={page1Experience} isFull={isFull} renderedBodies={renderedBodies} />
+            {/* Rest in 3-column grid */}
+            <div class="skills-grid">
+              {allSkills.filter(s => s.data.name !== 'Specialized Skills').map((skill) => (
+                <div class="pill-group">
+                  <div class="pill-category">{skill.data.name}</div>
+                  <div class="pill-wrap">
+                    {skill.data.items.map((item) => (
+                      <span class="pill">{item}</span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- PAGE 2 -->
-      {hasPage2Content && (
+          <!-- Education inline -->
+          <div class="education-bar">
+            <ResumeEducation education={education} />
+          </div>
+
+          <!-- Awards & Certifications first (eye-catching) -->
+          <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+
+          <!-- All experience flows naturally -->
+          <ResumeExperience entries={experience} isFull={isFull} renderedBodies={renderedBodies} />
+        </div>
+      </>
+    ) : (
+      <>
+        <!-- ==================== CONDENSED: FIXED TWO-PAGE LAYOUT ==================== -->
+        <!-- PAGE 1 -->
         <div class="resume-page">
           <div class="page-content">
+            <div class="resume-header-wrapper">
+              <ResumeHeader />
+            </div>
+
             <div class="resume-grid resume-grid-fill">
               <aside class="resume-sidebar">
-                {mainSkills.length > 0 && (
-                  <ResumeSkills skills={mainSkills} />
-                )}
+                <ResumeSkills skills={sidebarSkills} />
+                <ResumeEducation education={education} />
               </aside>
 
               <div class="resume-main">
-                {page2Experience.length > 0 && (
-                  <ResumeExperience entries={page2Experience} isFull={isFull} renderedBodies={renderedBodies} />
-                )}
-                <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+                <ResumeExperience entries={page1Experience} isFull={isFull} renderedBodies={renderedBodies} />
               </div>
             </div>
           </div>
         </div>
-      )}
+
+        <!-- PAGE 2 -->
+        {hasPage2Content && (
+          <div class="resume-page">
+            <div class="page-content">
+              <div class="resume-grid resume-grid-fill">
+                <aside class="resume-sidebar">
+                  {mainSkills.length > 0 && (
+                    <ResumeSkills skills={mainSkills} />
+                  )}
+                </aside>
+
+                <div class="resume-main">
+                  {page2Experience.length > 0 && (
+                    <ResumeExperience entries={page2Experience} isFull={isFull} renderedBodies={renderedBodies} />
+                  )}
+                  <ResumeAwards awards={awards} certifications={certifications} isFull={isFull} />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
     )}
   </body>
 </html>
